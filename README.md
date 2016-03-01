@@ -2,9 +2,7 @@
 
 [![Release](https://jitpack.io/v/com.github.alirezaaa/TimelinePostContainer.svg)](https://jitpack.io/#alirezaaa/TimelinePostContainer)
 
-Timeline is so famous and user friendly at this time, if you need to know implement one of them at the your next project, I built one and you can only import and use it simply.
-
-![image] (images/main_framed.png)
+Timeline is so famous and user friendly at this time, if you need to know implement one of them at the your next project, I built one and you can import and use it simply.
 
 ## A Quick Overview What's In
 * Compatible down to API Level 16
@@ -63,6 +61,11 @@ public class SampleActivity extends AppCompatActivity {
     }
 }
 ```
+
+## Apps using the TimelinePostContainer
+*Feel free to send me new projects.*
+- [Collect-Up](http://collect-up.com)
+
 ## Contributors
 - [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (developer)
 
