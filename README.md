@@ -1,9 +1,10 @@
 # TimelinePostContainer
 
-[![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](http://developer.android.com/index.html)
+[![Platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](http://developer.android.com/index.html)
+[![Compatibility](https://img.shields.io/badge/compatibility-API%2016%2B-green.svg)](https://android-arsenal.com/api?level=16)
 [![Release](https://jitpack.io/v/alirezaaa/TimelinePostContainer.svg)](https://jitpack.io/#alirezaaa/TimelinePostContainer)
-[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![License](https://img.shields.io/badge/License-Apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Codacy](https://api.codacy.com/project/badge/grade/ffa490a98def457e8cac302b33c9d89c)](https://www.codacy.com/app/aesshoferi/TimelinePostContainer)
+[![License](https://img.shields.io/badge/license-apache%202-blue.svg)](www.apache.org/licenses/LICENSE-2.0)
 
 Timeline is a famous and user-friendly feature these days; If you need to implement one of them at the your next project, consider using this library. Tried to have simple methods, currently you just need to write three lines of codes!
 
