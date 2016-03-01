@@ -1,6 +1,6 @@
 # TimelinePostContainer
 
-[![Release](https://jitpack.io/v/com.github.alirezaaa/TimelinePostContainer.svg)](https://jitpack.io/#alirezaaa/TimelinePostContainer)
+[![Release](https://jitpack.io/v/alirezaaa/TimelinePostContainer.svg)](https://jitpack.io/#alirezaaa/TimelinePostContainer)
 
 Timeline is so famous and user friendly at this time, if you need to know implement one of them at the your next project, I built one and you can import and use it simply.
 
