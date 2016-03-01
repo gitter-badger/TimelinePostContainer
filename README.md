@@ -38,7 +38,7 @@ allprojects {
 Add the dependency
 ```gradle
 dependencies {
-    compile 'com.github.alirezaaa:TimelinePostContainer:2.0'
+    compile 'com.github.alirezaaa:TimelinePostContainer:2.0.1'
 }
 ```
 ### Clone or Download `.zip` file
