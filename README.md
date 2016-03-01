@@ -56,8 +56,8 @@ public class SampleActivity extends AppCompatActivity {
         timelinePostContainer.setImageLoader(MyApplication.getInstance().getImageLoader());
 
         timelinePostContainer.setImagePath("image path");
-        timelinePostContainer.setVideoPath("video path if you need a video implementation");
-        timelinePostContainer.build(Type.VIDEO); //or Type.IMAGE if you need a image implementation
+        timelinePostContainer.setVideoPath("video path if you need the video implementation");
+        timelinePostContainer.build(Type.VIDEO); //or Type.IMAGE if you need the image implementation
     }
 }
 ```
