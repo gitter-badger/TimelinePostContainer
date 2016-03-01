@@ -17,7 +17,6 @@
 package com.github.alirezaaa.timelinepostcontainer.interfaces;
 
 import android.animation.Animator;
-import android.view.View;
 import android.widget.VideoView;
 
 import com.github.alirezaaa.timelinepostcontainer.ImageVolleyView;

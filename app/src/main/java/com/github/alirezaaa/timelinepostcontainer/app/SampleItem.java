@@ -16,15 +16,12 @@
 
 package com.github.alirezaaa.timelinepostcontainer.app;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer;
 import com.github.alirezaaa.timelinepostcontainer.Type;
-import com.github.alirezaaa.timelinepostcontainer.interfaces.ICallback;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import butterknife.Bind;

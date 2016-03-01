@@ -17,9 +17,10 @@
 package com.github.alirezaaa.timelinepostcontainer;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
@@ -47,6 +48,7 @@ public class ImageVolleyView extends ImageView {
     /**
      * Current ImageContainer. (either in-flight or finished)
      */
+    @Nullable
     private ImageLoader.ImageContainer mImageContainer;
 
     public ImageVolleyView(Context context) {
@@ -92,12 +94,12 @@ public class ImageVolleyView extends ImageView {
         int width = getWidth();
         int height = getHeight();
 
-        boolean isFullyWrapContent = getLayoutParams() != null
-                && getLayoutParams().height == FrameLayout.LayoutParams.WRAP_CONTENT
-                && getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT;
+        boolean isFullyWrapContent = (getLayoutParams() != null)
+                && (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT)
+                && (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT);
         // if the view's bounds aren't known yet, and this is not a wrap-content/wrap-content
         // view, hold off on loading the image.
-        if (width == 0 && height == 0 && !isFullyWrapContent) {
+        if ((width == 0) && (height == 0) && !isFullyWrapContent) {
             return;
         }
 
@@ -113,7 +115,7 @@ public class ImageVolleyView extends ImageView {
         }
 
         // if there was an old request in this view, check if it needs to be canceled.
-        if (mImageContainer != null && mImageContainer.getRequestUrl() != null) {
+        if ((mImageContainer != null) && (mImageContainer.getRequestUrl() != null)) {
             if (mImageContainer.getRequestUrl().equals(mUrl)) {
                 // if the request is from the same URL, return.
                 return;
@@ -126,10 +128,12 @@ public class ImageVolleyView extends ImageView {
 
         // The pre-existing content of this view didn't match the current URL. Load the new image
         // from the network.
-        ImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
+
+        // update the ImageContainer to be the new bitmap container.
+        mImageContainer = mImageLoader.get(mUrl,
                 new ImageLoader.ImageListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onErrorResponse(VolleyError volleyError) {
                         if (mErrorImageId != 0) {
                             setImageResource(mErrorImageId);
                         }
@@ -140,7 +144,7 @@ public class ImageVolleyView extends ImageView {
                     }
 
                     @Override
-                    public void onResponse(final ImageLoader.ImageContainer response, boolean isImmediate) {
+                    public void onResponse(final ImageLoader.ImageContainer imageContainer, boolean isImmediate) {
                         // If this was an immediate response that was delivered inside of a layout
                         // pass do not set the image immediately as it will trigger a requestLayout
                         // inside of a layout. Instead, defer setting the image by posting back to
@@ -149,14 +153,14 @@ public class ImageVolleyView extends ImageView {
                             post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onResponse(response, false);
+                                    onResponse(imageContainer, false);
                                 }
                             });
                             return;
                         }
 
-                        if (response.getBitmap() != null) {
-                            setImageBitmap(response.getBitmap());
+                        if (imageContainer.getBitmap() != null) {
+                            setImageBitmap(imageContainer.getBitmap());
                         } else if (mDefaultImageId != 0) {
                             setImageResource(mDefaultImageId);
                         }
@@ -166,9 +170,6 @@ public class ImageVolleyView extends ImageView {
                         }
                     }
                 });
-
-        // update the ImageContainer to be the new bitmap container.
-        mImageContainer = newContainer;
     }
 
     private void setDefaultImageOrNull() {
@@ -200,7 +201,7 @@ public class ImageVolleyView extends ImageView {
         ImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
                 new ImageLoader.ImageListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onErrorResponse(VolleyError volleyError) {
                         if (mErrorImageId != 0) {
                             setImageResource(mErrorImageId);
                         }
@@ -211,23 +212,9 @@ public class ImageVolleyView extends ImageView {
                     }
 
                     @Override
-                    public void onResponse(final ImageLoader.ImageContainer response, boolean isImmediate) {
-                        // If this was an immediate response that was delivered inside of a layout
-                        // pass do not set the image immediately as it will trigger a requestLayout
-                        // inside of a layout. Instead, defer setting the image by posting back to
-                        // the main thread.
-                        if (isImmediate && isInLayoutPass) {
-                            post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onResponse(response, false);
-                                }
-                            });
-                            return;
-                        }
-
-                        if (response.getBitmap() != null) {
-                            setImageBitmap(response.getBitmap());
+                    public void onResponse(ImageLoader.ImageContainer imageContainer, boolean isImmediate) {
+                        if (imageContainer.getBitmap() != null) {
+                            setImageBitmap(imageContainer.getBitmap());
                         } else if (mDefaultImageId != 0) {
                             setImageResource(mDefaultImageId);
                         }

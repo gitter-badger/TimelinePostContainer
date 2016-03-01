@@ -127,11 +127,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         mType = type;
 
         if (mImageLoader == null) {
-            throw new NullPointerException(getContext().getString(R.string.image_loader_not_null));
+            throw new IllegalArgumentException(getContext().getString(R.string.image_loader_not_null));
         }
 
         if (mType == null) {
-            throw new NullPointerException(getContext().getString(R.string.type_must_defined));
+            throw new IllegalArgumentException(getContext().getString(R.string.type_must_defined));
         }
 
         videoIsPrepared = false;
@@ -171,7 +171,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private void addTryAgainView() {
         final TextView view = createExplanatoryView(R.string.try_again);
         view.setClickable(true);
-        view.setOnClickListener(new OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addProgressBar();
@@ -185,8 +185,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private TextView createExplanatoryView(@StringRes int text) {
         removeProgressBar();
 
-        final TextView textView = new TextView(getContext());
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView textView = new TextView(getContext());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         textView.setLayoutParams(params);
         textView.setTextColor(getContext().getResources().getColor(android.R.color.white));
@@ -257,7 +257,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-
+                //nothing
             }
         });
 
@@ -395,12 +395,10 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            if (isRemovingImageNeeded()) {
-                removeForeground();
-                removeProgressBar();
-                removeImage();
-            }
+        if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isRemovingImageNeeded()) {
+            removeForeground();
+            removeProgressBar();
+            removeImage();
         }
 
         if (percent == 100) {
@@ -490,7 +488,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 videoIsPrepared = true;
                 addProgressBar();
                 final VideoView videoView = new VideoView(getContext());
-                LayoutParams videoParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 videoView.setLayoutParams(videoParams);
                 videoView.setVideoPath(mVideoPath);
                 videoView.setKeepScreenOn(true);
@@ -541,10 +539,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 }
             }
 
-        } else if ((v instanceof ImageVolleyView) && (mType == Type.IMAGE)) {
-            if (mImageTypeClickListener != null) {
-                mImageTypeClickListener.onImageTypeClickListener(v, getTag());
-            }
+        } else if ((v instanceof ImageVolleyView) && (mType == Type.IMAGE) && (mImageTypeClickListener != null)) {
+            mImageTypeClickListener.onImageTypeClickListener(v, getTag());
         }
     }
 
