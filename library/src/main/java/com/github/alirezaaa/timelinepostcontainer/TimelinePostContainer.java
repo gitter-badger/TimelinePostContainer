@@ -386,7 +386,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     public TimelinePostContainer setImageLoader(ImageLoader imageLoader) {
         if (imageLoader == null) {
-            throw new NullPointerException(getContext().getString(R.string.image_loader_not_null));
+            throw new IllegalArgumentException(getContext().getString(R.string.image_loader_not_null));
         }
 
         mImageLoader = imageLoader;

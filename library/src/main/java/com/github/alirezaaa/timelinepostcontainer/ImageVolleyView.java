@@ -197,7 +197,6 @@ public class ImageVolleyView extends ImageView {
     }
 
     public void tryAgain() {
-        final boolean isInLayoutPass = false;
         ImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
                 new ImageLoader.ImageListener() {
                     @Override
