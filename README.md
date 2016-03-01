@@ -6,7 +6,7 @@
 [![Codacy](https://api.codacy.com/project/badge/grade/ffa490a98def457e8cac302b33c9d89c)](https://www.codacy.com/app/aesshoferi/TimelinePostContainer)
 [![License](https://img.shields.io/badge/license-apache%202-blue.svg)](www.apache.org/licenses/LICENSE-2.0)
 
-Timeline is a famous and user-friendly feature these days; If you need to implement one of them at the your next project, consider using this library. Tried to have simple methods, currently you just need to write three lines of codes!
+Timeline is a famous and user-friendly feature these days; If you need to implement one of them in your projects, consider using this library. Tried to have simple methods, currently you just need to write three lines of codes!
 
 ## A Quick Overview What's In
 * Compatible down to API Level 16
