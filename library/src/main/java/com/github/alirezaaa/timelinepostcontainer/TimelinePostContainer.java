@@ -484,6 +484,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if ((v instanceof ImageVolleyView) && (mType == Type.VIDEO)) {
+            // Clicking on try again plays the video, this workaround prevents that.
+            if (((ImageVolleyView) v).getDrawable() == null) {
+                return;
+            }
+
             if (!videoIsPrepared) {
                 videoIsPrepared = true;
                 addProgressBar();
@@ -540,6 +545,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             }
 
         } else if ((v instanceof ImageVolleyView) && (mType == Type.IMAGE) && (mImageTypeClickListener != null)) {
+            // Clicking on try again plays the video, this workaround prevents that.
+            if (((ImageVolleyView) v).getDrawable() == null) {
+                return;
+            }
+
             mImageTypeClickListener.onImageTypeClickListener(v, getTag());
         }
     }
