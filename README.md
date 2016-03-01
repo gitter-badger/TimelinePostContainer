@@ -71,7 +71,7 @@ public class SampleActivity extends AppCompatActivity {
 
 ## Contributors
 - [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (developer)
-- [Farzad Nadiri] (thanks to)
+- Farzad Nadiri (thanks to)
 
 ## License
     Copyright 2016 Alireza Eskandarpour Shoferi
