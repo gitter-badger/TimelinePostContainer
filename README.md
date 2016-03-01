@@ -6,17 +6,17 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 
 ## A Quick Overview What's In
 * Compatible down to API Level 16
-* Try again option on cases there's a problem with getting images
+* Try loading images again if there's a problem with internet connection
 * Native `VideoView`
 * Listeners (double tap, image click)
-* Two kind of posts (only images and videos including a thumbnail)
+* Two kinds of posts supported (only images and videos with a thumbnail)
 * Indeterminate `ProgressBar` while loading
-* Good performance
-* Volley used for loading images and caching them
+* Volley used for loading and caching images
 * Plays only one video at a time
-* Play and/or pause with a drawable
+* Play and/or pause videos with a drawable
 * Compatible with using inside `RecyclerView`
-* Good animations
+* Appropriate animations
+* Good performance
 
 ## Include to Project
 ### Provide the Gradle Dependency
