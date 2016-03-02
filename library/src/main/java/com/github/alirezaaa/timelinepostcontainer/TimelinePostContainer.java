@@ -62,7 +62,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private IImageTypeClickListener mImageTypeClickListener;
     private GestureDetector gestureDet;
     private IDoubleTapListener mDoubleTapListener;
-    private boolean mIsVideoPrepared;
     private ImageLoader mImageLoader;
     private ICallback mCallback;
     private ImageVolleyView mImageView;
@@ -135,7 +134,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             throw new IllegalArgumentException(getContext().getString(R.string.type_must_defined));
         }
 
-        mIsVideoPrepared = false;
         mProgressBarView = createProgressBar();
 
         removeAllViews();
@@ -317,7 +315,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         super.onDetachedFromWindow();
 
         removeAllViews();
-        mIsVideoPrepared = false;
         addView(createImageView(), 0);
     }
 
@@ -492,59 +489,59 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             }
 
             if (mType == Type.VIDEO) {
-                if (!mIsVideoPrepared) {
-                    mIsVideoPrepared = true;
-                    addProgressBar();
-                    final VideoView videoView = new VideoView(getContext());
-                    FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    videoView.setLayoutParams(videoParams);
-                    videoView.setVideoPath(mVideoPath);
-                    videoView.setKeepScreenOn(true);
-                    videoView.setOnTouchListener(this);
+                // Prevents from preparing the video multiple times by multiple clicking on the image.
+                v.setOnClickListener(null);
 
-                    videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                addProgressBar();
+                final VideoView videoView = new VideoView(getContext());
+                FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                videoView.setLayoutParams(videoParams);
+                videoView.setVideoPath(mVideoPath);
+                videoView.setKeepScreenOn(true);
+                videoView.setOnTouchListener(this);
+
+                videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        addErrorView();
+                        return true;
+                    }
+                });
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                         @Override
-                        public boolean onError(MediaPlayer mp, int what, int extra) {
-                            addErrorView();
-                            return true;
-                        }
-                    });
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                            @Override
-                            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                                    removeForeground();
-                                    removeProgressBar();
-                                    removeImage();
-                                }
-                                return false;
+                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                                removeForeground();
+                                removeProgressBar();
+                                removeImage();
                             }
-                        });
-                    }
-
-                    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
-                            mp.setOnCompletionListener(TimelinePostContainer.this);
-                            mp.setLooping(mLooping);
-
-                            mPreviousVideoView = mCurrentVideoView;
-                            mCurrentVideoView = videoView;
-
-                            stopPreviousVideo();
-
-                            mp.start();
+                            return false;
                         }
                     });
+                }
 
-                    addView(videoView, 0);
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
+                        mp.setOnCompletionListener(TimelinePostContainer.this);
+                        mp.setLooping(mLooping);
 
-                    if (mCallback != null) {
-                        mCallback.onVideoCreate(videoView);
+                        mPreviousVideoView = mCurrentVideoView;
+                        mCurrentVideoView = videoView;
+
+                        stopPreviousVideo();
+
+                        mp.start();
                     }
+                });
+
+                addView(videoView, 0);
+
+                if (mCallback != null) {
+                    mCallback.onVideoCreate(videoView);
                 }
             } else if (mType == Type.IMAGE) {
                 if (mImageTypeClickListener != null) {
