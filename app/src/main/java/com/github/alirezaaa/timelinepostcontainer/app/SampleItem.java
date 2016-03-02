@@ -69,7 +69,7 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.timelinePostContainer)
-        TimelinePostContainer timelinePostContainer;
+        public TimelinePostContainer timelinePostContainer;
 
         public ViewHolder(View itemView) {
             super(itemView);
