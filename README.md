@@ -61,7 +61,7 @@ Add the dependency:
 	    <version>x.y.z</version>
 	</dependency>
 ```
-**Note:** Replace `x.y.z` with the latest version which can be found at [releases section](/releases).
+**Note:** Replace `x.y.z` with the latest version which can be found at [releases section](../../releases).
 ### Clone or Download `.zip` file
 Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
