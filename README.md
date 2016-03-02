@@ -45,21 +45,21 @@ dependencies {
 #### Step 1
 Add the JitPack in your `pom.xml`:
 ```maven
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
 ```
 #### Step 2
 Add the dependency:
 ```maven
-	<dependency>
-	    <groupId>com.github.alirezaaa</groupId>
-	    <artifactId>TimelinePostContainer</artifactId>
-	    <version>x.y.z</version>
-	</dependency>
+<dependency>
+	<groupId>com.github.alirezaaa</groupId>
+	<artifactId>TimelinePostContainer</artifactId>
+	<version>x.y.z</version>
+</dependency>
 ```
 **Note:** Replace `x.y.z` with the latest version which can be found at [releases section](../../releases).
 ### Clone or Download `.zip` file
