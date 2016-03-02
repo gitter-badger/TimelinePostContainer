@@ -56,13 +56,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private String mImagePath;
     private String mVideoPath;
     private Type mType;
-    private ProgressBar mProgressBar;
+    private ProgressBar mProgressBarView;
     private Drawable mForeground;
     private boolean mLooping;
     private IImageTypeClickListener mImageTypeClickListener;
     private GestureDetector gestureDet;
     private IDoubleTapListener mDoubleTapListener;
-    private boolean videoIsPrepared;
+    private boolean mIsVideoPrepared;
     private ImageLoader mImageLoader;
     private ICallback mCallback;
     private ImageVolleyView mImageView;
@@ -135,8 +135,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             throw new IllegalArgumentException(getContext().getString(R.string.type_must_defined));
         }
 
-        videoIsPrepared = false;
-        mProgressBar = createProgressBar();
+        mIsVideoPrepared = false;
+        mProgressBarView = createProgressBar();
 
         removeAllViews();
 
@@ -303,12 +303,12 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return this;
     }
 
-    public ProgressBar getProgressBar() {
-        return mProgressBar;
+    public ProgressBar getProgressBarView() {
+        return mProgressBarView;
     }
 
-    public TimelinePostContainer setProgressBar(ProgressBar progressBar) {
-        mProgressBar = progressBar;
+    public TimelinePostContainer setProgressBarView(ProgressBar progressBarView) {
+        mProgressBarView = progressBarView;
         return this;
     }
 
@@ -317,7 +317,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         super.onDetachedFromWindow();
 
         removeAllViews();
-        videoIsPrepared = false;
+        mIsVideoPrepared = false;
         addView(createImageView(), 0);
     }
 
@@ -351,8 +351,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private void removeProgressBar() {
-        if (mProgressBar != null) {
-            removeView(mProgressBar);
+        if (mProgressBarView != null) {
+            removeView(mProgressBarView);
         }
     }
 
@@ -451,9 +451,9 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private void addProgressBar() {
-        if (mProgressBar.getParent() == null) {
+        if (mProgressBarView.getParent() == null) {
             removeForeground();
-            addView(mProgressBar);
+            addView(mProgressBarView);
         }
     }
 
@@ -492,8 +492,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             }
 
             if (mType == Type.VIDEO) {
-                if (!videoIsPrepared) {
-                    videoIsPrepared = true;
+                if (!mIsVideoPrepared) {
+                    mIsVideoPrepared = true;
                     addProgressBar();
                     final VideoView videoView = new VideoView(getContext());
                     FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
