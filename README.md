@@ -25,7 +25,7 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 ## Include to Project
 ### Provide the Gradle Dependency
 #### Step 1
-Add the JitPack in your root `build.gradle` at the end of repositories:
+Add the JitPack in your root `build.gradle`:
 ```gradle
 allprojects {
     repositories {
@@ -35,12 +35,33 @@ allprojects {
 }
 ```
 #### Step 2
-Add the dependency
+Add the dependency:
 ```gradle
 dependencies {
-    compile 'com.github.alirezaaa:TimelinePostContainer:2.0.1'
+    compile 'com.github.alirezaaa:TimelinePostContainer:x.y.z'
 }
 ```
+### Provide the Maven Dependency
+#### Step 1
+Add the JitPack in your `pom.xml`:
+```maven
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+#### Step 2
+Add the dependency:
+```maven
+	<dependency>
+	    <groupId>com.github.alirezaaa</groupId>
+	    <artifactId>TimelinePostContainer</artifactId>
+	    <version>x.y.z</version>
+	</dependency>
+```
+**Note:** Replace `x.y.z` with the latest version which can be found at [releases section](/releases).
 ### Clone or Download `.zip` file
 Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
