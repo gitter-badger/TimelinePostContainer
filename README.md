@@ -44,7 +44,7 @@ dependencies {
 ### Provide the Maven Dependency
 #### Step 1
 Add the JitPack in your `pom.xml`:
-```maven
+```xml
 <repositories>
 	<repository>
 		<id>jitpack.io</id>
@@ -54,7 +54,7 @@ Add the JitPack in your `pom.xml`:
 ```
 #### Step 2
 Add the dependency:
-```maven
+```xml
 <dependency>
 	<groupId>com.github.alirezaaa</groupId>
 	<artifactId>TimelinePostContainer</artifactId>
