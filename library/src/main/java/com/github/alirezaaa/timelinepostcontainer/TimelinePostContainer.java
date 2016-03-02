@@ -48,6 +48,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     private static VideoView mCurrentVideoView;
     private static VideoView mPreviousVideoView;
+    private static String TAG = TimelinePostContainer.class.getSimpleName();
     int lastPlaybackPosition;
     boolean isFirstTime;
     @IdRes
@@ -296,7 +297,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         mVideoPath = videoPath;
 
         if (BuildConfig.DEBUG) {
-            Log.d("Video path", videoPath);
+            Log.d(TAG, videoPath);
         }
 
         return this;
@@ -395,6 +396,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        // This is a workaround because API 16 doesn't support setOnInfoListener()
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isRemovingImageNeeded()) {
             removeForeground();
             removeProgressBar();
@@ -421,7 +423,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     /**
-     * Removes the image
+     * Removes the image.
      */
     private void removeImage() {
         int childCounts = getChildCount();
@@ -483,76 +485,72 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if ((v instanceof ImageVolleyView) && (mType == Type.VIDEO)) {
+        if (v instanceof ImageVolleyView) {
             // Clicking on try again plays the video, this workaround prevents that.
             if (((ImageVolleyView) v).getDrawable() == null) {
                 return;
             }
 
-            if (!videoIsPrepared) {
-                videoIsPrepared = true;
-                addProgressBar();
-                final VideoView videoView = new VideoView(getContext());
-                FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                videoView.setLayoutParams(videoParams);
-                videoView.setVideoPath(mVideoPath);
-                videoView.setKeepScreenOn(true);
-                videoView.setOnTouchListener(this);
+            if (mType == Type.VIDEO) {
+                if (!videoIsPrepared) {
+                    videoIsPrepared = true;
+                    addProgressBar();
+                    final VideoView videoView = new VideoView(getContext());
+                    FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    videoView.setLayoutParams(videoParams);
+                    videoView.setVideoPath(mVideoPath);
+                    videoView.setKeepScreenOn(true);
+                    videoView.setOnTouchListener(this);
 
-                videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        addErrorView();
-                        return true;
-                    }
-                });
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                         @Override
-                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                                removeForeground();
-                                removeProgressBar();
-                                removeImage();
-                            }
-                            return false;
+                        public boolean onError(MediaPlayer mp, int what, int extra) {
+                            addErrorView();
+                            return true;
                         }
                     });
-                }
 
-                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
-                        mp.setOnCompletionListener(TimelinePostContainer.this);
-                        mp.setLooping(mLooping);
-
-                        mPreviousVideoView = mCurrentVideoView;
-                        mCurrentVideoView = videoView;
-
-                        stopPreviousVideo();
-
-                        mp.start();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                            @Override
+                            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                                    removeForeground();
+                                    removeProgressBar();
+                                    removeImage();
+                                }
+                                return false;
+                            }
+                        });
                     }
-                });
 
-                addView(videoView, 0);
+                    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
+                            mp.setOnCompletionListener(TimelinePostContainer.this);
+                            mp.setLooping(mLooping);
 
-                if (mCallback != null) {
-                    mCallback.onVideoCreate(videoView);
+                            mPreviousVideoView = mCurrentVideoView;
+                            mCurrentVideoView = videoView;
+
+                            stopPreviousVideo();
+
+                            mp.start();
+                        }
+                    });
+
+                    addView(videoView, 0);
+
+                    if (mCallback != null) {
+                        mCallback.onVideoCreate(videoView);
+                    }
+                }
+            } else if (mType == Type.IMAGE) {
+                if (mImageTypeClickListener != null) {
+                    mImageTypeClickListener.onImageTypeClickListener(v, getTag());
                 }
             }
-
-        } else if ((v instanceof ImageVolleyView) && (mType == Type.IMAGE) && (mImageTypeClickListener != null)) {
-            // Clicking on try again plays the video, this workaround prevents that.
-            if (((ImageVolleyView) v).getDrawable() == null) {
-                return;
-            }
-
-            mImageTypeClickListener.onImageTypeClickListener(v, getTag());
         }
     }
-
-
 }
