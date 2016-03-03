@@ -27,7 +27,7 @@ import butterknife.Bind;
 public class SampleOneActivity extends AppCompatActivity {
 
     @Bind(R.id.timelinePostContainer)
-    TimelinePostContainer timelinePostContainer;
+    public TimelinePostContainer timelinePostContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

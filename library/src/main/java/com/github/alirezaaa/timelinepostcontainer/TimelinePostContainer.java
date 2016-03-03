@@ -49,10 +49,10 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private static VideoView mCurrentVideoView;
     private static VideoView mPreviousVideoView;
     private static String TAG = TimelinePostContainer.class.getSimpleName();
-    int lastPlaybackPosition;
-    boolean isFirstTime;
+    private int lastPlaybackPosition;
+    private boolean isFirstTime;
     @IdRes
-    int imageViewId;
+    private int imageViewId;
     private String mImagePath;
     private String mVideoPath;
     private Type mType;
@@ -543,10 +543,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 if (mCallback != null) {
                     mCallback.onVideoCreate(videoView);
                 }
-            } else if (mType == Type.IMAGE) {
-                if (mImageTypeClickListener != null) {
-                    mImageTypeClickListener.onImageTypeClickListener(v, getTag());
-                }
+            } else if ((mType == Type.IMAGE) && (mImageTypeClickListener != null)) {
+                mImageTypeClickListener.onImageTypeClickListener(v, getTag());
             }
         }
     }

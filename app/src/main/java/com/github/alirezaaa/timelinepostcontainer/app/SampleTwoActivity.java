@@ -23,10 +23,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
+import butterknife.Bind;
+
 public class SampleTwoActivity extends AppCompatActivity {
 
-    RecyclerView mRecyclerView;
-    String[] mLinks = {
+    @Bind(R.id.recyclerView)
+    public RecyclerView mRecyclerView;
+    private String[] mLinks = {
             "http://collectup.blob.core.windows.net/videos/ce39daa3-cada-4e21-9342-1aa062d39324.mp4",
             "http://collectup.blob.core.windows.net/videos/fc16f22a-e458-4056-8218-1d17ddbadb37.mp4",
             "http://collectup.blob.core.windows.net/videos/1ac93067-d67c-47ed-aa39-cce4491b4bf9.mp4",
@@ -49,14 +52,13 @@ public class SampleTwoActivity extends AppCompatActivity {
 
         setContentView(R.layout.sample_two);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FastItemAdapter<SampleItem> adapter = new FastItemAdapter<>();
 
-        for (int i = 0; i < mLinks.length; i++) {
-            adapter.add(new SampleItem(this).setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLinks[i]));
+        for (String mLink : mLinks) {
+            adapter.add(new SampleItem(this).setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLink));
         }
 
         mRecyclerView.setAdapter(adapter);
