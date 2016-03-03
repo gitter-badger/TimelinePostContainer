@@ -65,7 +65,7 @@ Add the dependency:
 ### Clone or Download `.zip` file
 Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
-## Usages
+## Usage
 You just have to provide the `ImageLoader` and your desired image and/or video paths as I did below or simply compile and try the sample `app` provided:
 ```java
 public class SampleActivity extends AppCompatActivity {
