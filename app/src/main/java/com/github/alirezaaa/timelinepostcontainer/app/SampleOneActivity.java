@@ -23,6 +23,7 @@ import com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer;
 import com.github.alirezaaa.timelinepostcontainer.Type;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class SampleOneActivity extends AppCompatActivity {
 
@@ -33,8 +34,7 @@ public class SampleOneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_one);
-
-        timelinePostContainer.setImageLoader(MyApplication.getInstance().getImageLoader());
+        ButterKnife.bind(this);
 
         timelinePostContainer.setImagePath("http://collectup.blob.core.windows.net/images/420e969d-3fef-48cf-a968-f79945a5ed85.jpg");
         timelinePostContainer.setVideoPath("http://collectup.blob.core.windows.net/videos/ff59ab2e-d14e-4f0e-b585-e36bd72649bd.mp4");

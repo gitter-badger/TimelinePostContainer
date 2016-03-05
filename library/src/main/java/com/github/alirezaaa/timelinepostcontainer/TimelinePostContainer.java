@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -30,33 +31,39 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.ICallback;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.IDoubleTapListener;
+import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageLoading;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageTypeClickListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.todddavies.components.progressbar.ProgressWheel;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class TimelinePostContainer extends FrameLayout implements View.OnClickListener, View.OnTouchListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
 
+    private static final String TAG = TimelinePostContainer.class.getSimpleName();
     private static VideoView mCurrentVideoView;
     private static VideoView mPreviousVideoView;
-    private static String TAG = TimelinePostContainer.class.getSimpleName();
+    private static ProgressWheel mImageLoadingView;
+    private static IImageLoading mImageLoadingCallback;
     private int lastPlaybackPosition;
-    private boolean isFirstTime;
     @IdRes
     private int imageViewId;
     private String mImagePath;
     private String mVideoPath;
     private Type mType;
-    private ProgressBar mProgressBarView;
     private Drawable mForeground;
     private boolean mLooping;
     private IImageTypeClickListener mImageTypeClickListener;
@@ -64,7 +71,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private IDoubleTapListener mDoubleTapListener;
     private ImageLoader mImageLoader;
     private ICallback mCallback;
-    private ImageVolleyView mImageView;
+    private ImageView mImageView;
+    private AVLoadingIndicatorView mVideoLoadingView;
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -72,6 +80,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private void initConstructors() {
+        mImageLoader = InitClass.imageLoader(getContext());
+
         gestureDet = new GestureDetector(getContext(), new GestureListener());
         setForegroundGravity(Gravity.CENTER);
     }
@@ -134,11 +144,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             throw new IllegalArgumentException(getContext().getString(R.string.type_must_defined));
         }
 
-        mProgressBarView = createProgressBar();
+        mImageLoadingView = createImageLoading();
 
         removeAllViews();
 
-        ImageVolleyView view;
+        ImageView view;
         if (mType == Type.IMAGE) {
             view = createImageView();
             addView(createImageView(), 0);
@@ -153,18 +163,24 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private ProgressBar createProgressBar() {
-        ProgressBar progressBar = new ProgressBar(getContext());
-        progressBar.setIndeterminate(true);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-        layoutParams.topMargin = AndroidUtils.dpToPx(10);
-        layoutParams.rightMargin = AndroidUtils.dpToPx(10);
-        layoutParams.width = AndroidUtils.dpToPx(42);
-        layoutParams.height = AndroidUtils.dpToPx(42);
-        progressBar.setLayoutParams(layoutParams);
+    private ProgressWheel createImageLoading() {
+        return (ProgressWheel) LayoutInflater.from(getContext()).inflate(R.layout.image_loading, this, false);
+    }
 
-        return progressBar;
+    private ImageView createImageView() {
+        mImageView = new ImageView(getContext());
+        imageViewId = AndroidUtils.generateViewId();
+        mImageView.setId(imageViewId);
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mImageView.setLayoutParams(layoutParams);
+        mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        return mImageView;
+    }
+
+    private AVLoadingIndicatorView createVideoLoading() {
+        return (AVLoadingIndicatorView) LayoutInflater.from(getContext()).inflate(R.layout.video_loading, this, false);
     }
 
     private void addTryAgainView() {
@@ -173,94 +189,70 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addProgressBar();
-                mImageView.tryAgain();
                 removeView(view);
+                displayImage();
             }
         });
         addView(view);
     }
 
     private TextView createExplanatoryView(@StringRes int text) {
-        removeProgressBar();
+        removeImageLoadingView();
 
-        TextView textView = new TextView(getContext());
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
-        textView.setLayoutParams(params);
-        textView.setTextColor(getContext().getResources().getColor(android.R.color.white));
+        TextView textView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.unable_load_image, this, false);
         textView.setText(text);
-        textView.setTextSize(20.0f);
 
         return textView;
     }
 
-    private void addErrorView() {
-        addView(createExplanatoryView(R.string.unable_to_play));
+    private void addImageLoadingView() {
+        if (mImageLoadingView.getParent() == null) {
+            removeForeground();
+            addView(mImageLoadingView);
+        }
     }
 
-    private ImageVolleyView createImageView() {
-        mImageView = new ImageVolleyView(getContext());
-        imageViewId = AndroidUtils.generateViewId();
-        mImageView.setId(imageViewId);
-        addProgressBar();
+    private void addErrorView() {
+        addView(createExplanatoryView(R.string.unable_load_image));
+    }
 
-        mImageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+    private void displayImage() {
+        mImageLoader.displayImage(mImagePath, mImageView, null, new ImageLoadingListener() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if ((mType == Type.VIDEO) && !isFirstTime) {
-                    if (mImageView.getDrawable() != null) {
-                        isFirstTime = true;
-                        setForeground(mForeground);
-                    } else {
-                        removeForeground();
-                        addProgressBar();
-                    }
-                }
+            public void onLoadingStarted(String s, View view) {
+                addImageLoadingView();
             }
-        });
 
-        mImageView.setResponseObserver(new ImageVolleyView.ResponseObserver() {
             @Override
-            public void onError() {
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                removeImageLoadingView();
                 addTryAgainView();
             }
 
             @Override
-            public void onSuccess() {
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                 if (mType == Type.VIDEO) {
                     mImageView.setClickable(true);
                     mImageView.setOnClickListener(TimelinePostContainer.this);
+
+                    setPlayForeground();
                 } else {
                     // We should set clickable to false and pass null to the click listener,
                     // because the listener exists withing RecyclerView.
                     mImageView.setClickable(false);
                     mImageView.setOnClickListener(TimelinePostContainer.this);
                     mImageView.setOnTouchListener(TimelinePostContainer.this);
+
+                    removeForeground();
                 }
-                removeProgressBar();
-            }
-        });
-
-        mImageView.setImageUrl(mImagePath, mImageLoader);
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mImageView.setLayoutParams(layoutParams);
-        mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        mImageView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                setForeground((mType == Type.IMAGE) ? null : mForeground);
+                removeImageLoadingView();
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
-                //nothing
-            }
-        });
+            public void onLoadingCancelled(String s, View view) {
 
-        return mImageView;
+            }
+        }, new TimelinePostContainer.MyImageLoadingProgressListener());
     }
 
     public Type getType() {
@@ -301,12 +293,12 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return this;
     }
 
-    public ProgressBar getProgressBarView() {
-        return mProgressBarView;
+    public ProgressWheel getProgressBarView() {
+        return mImageLoadingView;
     }
 
-    public TimelinePostContainer setProgressBarView(ProgressBar progressBarView) {
-        mProgressBarView = progressBarView;
+    public TimelinePostContainer setProgressBarView(ProgressWheel progressBarView) {
+        mImageLoadingView = progressBarView;
         return this;
     }
 
@@ -325,14 +317,14 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v instanceof ImageVolleyView) {
+        if (v instanceof ImageView) {
             return (mType == Type.IMAGE) && gestureDet.onTouchEvent(event);
         }
 
         if ((v instanceof VideoView) && (event.getAction() == MotionEvent.ACTION_UP)) {
             if (((VideoView) v).isPlaying()) {
                 ((VideoView) v).pause();
-                removeProgressBar();
+                removeImageLoadingView();
                 setPlayForeground();
             } else {
                 mPreviousVideoView = mCurrentVideoView;
@@ -347,9 +339,9 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return true;
     }
 
-    private void removeProgressBar() {
-        if (mProgressBarView != null) {
-            removeView(mProgressBarView);
+    private void removeImageLoadingView() {
+        if (mImageLoadingView != null) {
+            removeView(mImageLoadingView);
         }
     }
 
@@ -396,27 +388,33 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         // This is a workaround because API 16 doesn't support setOnInfoListener()
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isRemovingImageNeeded()) {
             removeForeground();
-            removeProgressBar();
+            removeVideoLoadingView();
             removeImage();
         }
 
         if (percent == 100) {
-            removeProgressBar();
+            removeVideoLoadingView();
             return;
         }
 
         int duration = mp.getCurrentPosition();
 
         if ((duration == lastPlaybackPosition) && mp.isPlaying()) {
-            addProgressBar();
+            addVideoLoading();
         } else if (mp.isPlaying()) {
-            removeProgressBar();
+            removeVideoLoadingView();
         }
         lastPlaybackPosition = duration;
     }
 
     private boolean isRemovingImageNeeded() {
         return findViewById(imageViewId) != null;
+    }
+
+    private void removeVideoLoadingView() {
+        if (mVideoLoadingView != null) {
+            removeView(mVideoLoadingView);
+        }
     }
 
     /**
@@ -426,7 +424,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         int childCounts = getChildCount();
         for (int child = 0; child < childCounts; child++) {
             final View view = getChildAt(child);
-            if (view instanceof ImageVolleyView) {
+            if (view instanceof ImageView) {
                 // Animate removing image.
                 view.animate()
                         .alpha(0.0f)
@@ -447,18 +445,35 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private void addProgressBar() {
-        if (mProgressBarView.getParent() == null) {
+    private void addVideoLoading() {
+        if (mVideoLoadingView.getParent() == null) {
             removeForeground();
-            addView(mProgressBarView);
+            addView(mVideoLoadingView);
         }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        removeProgressBar();
+        removeImageLoadingView();
         if (!mLooping) {
             setPlayForeground();
+        }
+    }
+
+    public TimelinePostContainer setImageLoadingCallback(IImageLoading imageLoadingCallback) {
+        mImageLoadingCallback = imageLoadingCallback;
+        return this;
+    }
+
+    private static class MyImageLoadingProgressListener implements ImageLoadingProgressListener {
+        @Override
+        public void onProgressUpdate(String s, View view, int i, int i1) {
+            int progress = (360 * i) / i1;
+            mImageLoadingView.setProgress(progress);
+
+            if (mImageLoadingCallback != null) {
+                mImageLoadingCallback.onProgressUpdate(s, view, i, i1);
+            }
         }
     }
 
@@ -482,9 +497,9 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v instanceof ImageVolleyView) {
+        if (v instanceof ImageView) {
             // Clicking on try again plays the video, this workaround prevents that.
-            if (((ImageVolleyView) v).getDrawable() == null) {
+            if (((ImageView) v).getDrawable() == null) {
                 return;
             }
 
@@ -492,7 +507,9 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 // Prevents from preparing the video multiple times by multiple clicking on the image.
                 v.setOnClickListener(null);
 
-                addProgressBar();
+                mVideoLoadingView = createVideoLoading();
+                addVideoLoading();
+
                 final VideoView videoView = new VideoView(getContext());
                 FrameLayout.LayoutParams videoParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 videoView.setLayoutParams(videoParams);
@@ -514,7 +531,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                         public boolean onInfo(MediaPlayer mp, int what, int extra) {
                             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                                 removeForeground();
-                                removeProgressBar();
+                                removeImageLoadingView();
                                 removeImage();
                             }
                             return false;

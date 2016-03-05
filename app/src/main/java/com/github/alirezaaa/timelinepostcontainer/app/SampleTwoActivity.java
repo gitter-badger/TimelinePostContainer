@@ -21,15 +21,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.github.alirezaaa.timelinepostcontainer.InitClass;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class SampleTwoActivity extends AppCompatActivity {
 
-    @Bind(R.id.recyclerView)
-    public RecyclerView mRecyclerView;
-    private String[] mLinks = {
+    private final String[] mLinks = {
             "http://collectup.blob.core.windows.net/videos/ce39daa3-cada-4e21-9342-1aa062d39324.mp4",
             "http://collectup.blob.core.windows.net/videos/fc16f22a-e458-4056-8218-1d17ddbadb37.mp4",
             "http://collectup.blob.core.windows.net/videos/1ac93067-d67c-47ed-aa39-cce4491b4bf9.mp4",
@@ -45,15 +45,14 @@ public class SampleTwoActivity extends AppCompatActivity {
             "http://collectup.blob.core.windows.net/videos/088c1fda-e64e-48eb-92e6-32c9c73bf331.mp4",
             "http://collectup.blob.core.windows.net/videos/49689fa9-6010-4d49-aa8f-751313228868.mp4"
     };
+    @Bind(R.id.recyclerView)
+    public RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.sample_two);
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ButterKnife.bind(this);
 
         FastItemAdapter<SampleItem> adapter = new FastItemAdapter<>();
 
@@ -61,6 +60,9 @@ public class SampleTwoActivity extends AppCompatActivity {
             adapter.add(new SampleItem(this).setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLink));
         }
 
-        mRecyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(InitClass.imageLoader(this), false, true));
+        recyclerView.setAdapter(adapter);
     }
 }

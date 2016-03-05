@@ -12,10 +12,10 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 * Compatible down to API Level 16
 * Try loading images again if there's a problem with internet connection
 * Native `VideoView`
-* Listeners (double tap, image click)
+* Listeners (double tap, image click, image loading progress update, and etc.)
 * Two kinds of posts supported (only images and videos with a thumbnail)
-* Indeterminate `ProgressBar` while loading
-* Volley used for loading and caching images
+* Determinate progress view while loading images
+* [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) used for loading and caching images
 * Plays only one video at a time
 * Play and/or pause videos with a drawable
 * Compatible with using inside `RecyclerView`
@@ -86,6 +86,9 @@ public class SampleActivity extends AppCompatActivity {
     }
 }
 ```
+
+## Apps Used
+- [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
 
 ## Apps Using the TimelinePostContainer
 *feel free to send me new projects.*

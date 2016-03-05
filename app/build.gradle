@@ -41,11 +41,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
-    compile('com.mikepenz:fastadapter:1.2.2@aar') {
-        transitive = true
-    }
+    compile 'com.github.mikepenz.FastAdapter:library:v1.2.2'
     compile 'com.danikula:videocache:2.3.4'
-    compile(name: 'Volley', ext: 'aar')
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
     compile project(':library')
 }
