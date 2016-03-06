@@ -64,6 +64,9 @@ public class RecyclerPauseOnScrollListener extends RecyclerView.OnScrollListener
                     stopped = false;
                 }
                 break;
+            default:
+                // empty, intentional
+                break;
         }
         if (externalListener != null) {
             externalListener.onScrollStateChanged(recyclerView, newState);
