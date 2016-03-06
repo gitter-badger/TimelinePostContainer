@@ -84,6 +84,9 @@ public class PauseOnScrollListener implements AbsListView.OnScrollListener {
                     imageLoader.pause();
                 }
                 break;
+            default:
+                // empty, intentional
+                break;
         }
         if (externalListener != null) {
             externalListener.onScrollStateChanged(view, scrollState);
