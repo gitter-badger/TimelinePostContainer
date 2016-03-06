@@ -22,8 +22,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4
-        versionName '2.0.2'
+        versionCode 5
+        versionName '2.1'
     }
     buildTypes {
         release {
@@ -39,6 +39,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
     compile 'com.github.alirezaaa:ProgressWheel:1.2'
     compile 'com.github.81813780:AVLoadingIndicatorView:1.0.1'
