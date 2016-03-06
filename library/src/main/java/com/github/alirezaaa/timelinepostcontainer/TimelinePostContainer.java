@@ -248,7 +248,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
                     setPlayForeground();
                 } else {
-                    // We should set clickable to false and pass null to the click listener,
+                    // we should set clickable to false and pass null to the click listener,
                     // because the listener exists withing RecyclerView.
                     mImageView.setClickable(false);
                     mImageView.setOnClickListener(TimelinePostContainer.this);
@@ -261,7 +261,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
             @Override
             public void onLoadingCancelled(String s, View view) {
-
+                // empty
             }
         }, new TimelinePostContainer.MyImageLoadingProgressListener());
     }
@@ -292,7 +292,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     public TimelinePostContainer setVideoPath(String videoPath) {
-        //FIXME https://github.com/danikula/AndroidVideoCache/issues/60
+        // FIXME https://github.com/danikula/AndroidVideoCache/issues/60
         /*HttpProxyCacheServer proxy = MyApplication.getProxy(getContext());
         this.mVideoPath = proxy.getProxyUrl(mVideoPath);*/
         mVideoPath = videoPath;
@@ -405,7 +405,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        // This is a workaround because API 16 doesn't support setOnInfoListener()
+        // this is a workaround because API 16 doesn't support setOnInfoListener()
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isImageViewExists()) {
             removeForeground();
             removeVideoLoadingView();
@@ -453,7 +453,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         for (int child = 0; child < childCounts; child++) {
             final View view = getChildAt(child);
             if (view instanceof ImageView) {
-                // Animate removing image.
+                // animate removing image.
                 view.animate()
                         .alpha(0.0f)
                         .setListener(new AnimatorListenerAdapter() {
@@ -530,13 +530,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v instanceof ImageView) {
-            // Clicking on try again plays the video, this workaround prevents that.
+            // clicking on try again plays the video, this workaround prevents that.
             if (((ImageView) v).getDrawable() == null) {
                 return;
             }
 
             if (mType == Type.VIDEO) {
-                // Prevents from preparing the video multiple times by multiple clicking on the image.
+                // prevents from preparing the video multiple times by multiple clicking on the image.
                 v.setOnClickListener(null);
 
                 addVideoLoading();
