@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2016 Alireza Eskandarpour Shoferi
   ~
@@ -13,10 +14,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<resources>
-    <string name="image_loader_not_null">ImageLoader cannot be null.</string>
-    <string name="type_must_defined">You must define the type.</string>
-    <string name="unable_load_image">Couldn’t load image. Tap to retry.</string>
-    <string name="not_instance_of">Provided view is not an instance of %s.</string>
-</resources>
+<com.wang.avi.AVLoadingIndicatorView
+    android:id="@+id/avloadingIndicatorView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_gravity="top|right"
+    android:layout_marginEnd="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:visibility="visible"
+    app:indicator="LineScaleParty"
+    app:indicator_color="@android:color/white"/>

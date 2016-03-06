@@ -74,8 +74,6 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            timelinePostContainer.setImageLoader(MyApplication.getInstance().getImageLoader());
         }
     }
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2016 Alireza Eskandarpour Shoferi
   ~
@@ -15,8 +16,6 @@
   -->
 
 <resources>
-    <string name="image_loader_not_null">ImageLoader cannot be null.</string>
-    <string name="type_must_defined">You must define the type.</string>
-    <string name="unable_load_image">Couldn’t load image. Tap to retry.</string>
-    <string name="not_instance_of">Provided view is not an instance of %s.</string>
+    <color name="tpc_image_loading_rim">#EDEEEE</color>
+    <color name="tpc_image_loading_bar">#A6A8AB</color>
 </resources>

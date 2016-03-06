@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2016 Alireza Eskandarpour Shoferi
   ~
@@ -14,9 +15,9 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="image_loader_not_null">ImageLoader cannot be null.</string>
-    <string name="type_must_defined">You must define the type.</string>
-    <string name="unable_load_image">Couldn’t load image. Tap to retry.</string>
-    <string name="not_instance_of">Provided view is not an instance of %s.</string>
-</resources>
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="@null"
+    android:scaleType="centerCrop"/>

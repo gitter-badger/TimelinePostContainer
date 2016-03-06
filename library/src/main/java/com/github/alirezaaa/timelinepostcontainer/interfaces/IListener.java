@@ -16,8 +16,14 @@
 
 package com.github.alirezaaa.timelinepostcontainer.interfaces;
 
-import android.view.MotionEvent;
+import android.animation.Animator;
+import android.widget.ImageView;
+import android.widget.VideoView;
 
-public interface IDoubleTapListener {
-    void onImageDoubleTap(MotionEvent e);
+public interface IListener {
+    void onImageRemove(Animator animation);
+
+    void onImageCreate(ImageView view);
+
+    void onVideoCreate(VideoView view);
 }

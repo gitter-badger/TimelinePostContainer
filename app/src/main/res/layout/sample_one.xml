@@ -24,7 +24,6 @@
         android:id="@+id/timelinePostContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
         app:tpc_foreground="@drawable/ic_play_circle_outline_gray_big"
         app:tpc_looping="true">
 

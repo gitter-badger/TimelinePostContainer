@@ -16,19 +16,20 @@
 
 package com.github.alirezaaa.timelinepostcontainer;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.todddavies.components.progressbar.ProgressWheel;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AndroidUtils {
-
+final class AndroidUtils {
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
-
-    public static int dpToPx(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
-    }
 
     /**
      * Generate a value suitable for use in {@link View#setId(int)}.
@@ -36,7 +37,7 @@ public class AndroidUtils {
      *
      * @return a generated ID value
      */
-    public static int generateViewId() {
+    static int generateViewId() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             while (true) {
                 int result = sNextGeneratedId.get();
@@ -52,5 +53,21 @@ public class AndroidUtils {
         } else {
             return View.generateViewId();
         }
+    }
+
+    static ProgressWheel createImageLoading(Context context, ViewGroup viewGroup) {
+        return (ProgressWheel) LayoutInflater.from(context).inflate(R.layout.image_loading, viewGroup, false);
+    }
+
+    static AVLoadingIndicatorView createVideoLoading(Context context, ViewGroup viewGroup) {
+        return (AVLoadingIndicatorView) LayoutInflater.from(context).inflate(R.layout.video_loading, viewGroup, false);
+    }
+
+    static boolean isInstanceOf(View view, Class instance, Resources resources) {
+        if (!instance.getClass().isInstance(view)) {
+            throw new IllegalArgumentException(String.format(resources.getString(R.string.not_instance_of), instance.getSimpleName()));
+        }
+
+        return true;
     }
 }
