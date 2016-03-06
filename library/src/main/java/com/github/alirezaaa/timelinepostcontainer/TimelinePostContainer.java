@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
@@ -59,8 +58,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private static ProgressWheel mImageLoadingView;
     private static IImageLoadingListener mImageLoadingListener;
     private int lastPlaybackPosition;
-    @IdRes
-    private int imageViewId;
     private String mImagePath;
     private String mVideoPath;
     private Type mType;
@@ -187,8 +184,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     private ImageView createImageView() {
         mImageView = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.image_view, this, false);
-        imageViewId = AndroidUtils.generateViewId();
-        mImageView.setId(imageViewId);
 
         displayImage();
 
@@ -313,17 +308,17 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mImageLoadingView;
     }
 
+    public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
+        mImageLoadingView = imageLoadingLayout;
+        return this;
+    }
+
     public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
         View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
         if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
             mImageLoadingView = (ProgressWheel) view;
         }
 
-        return this;
-    }
-
-    public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
-        mImageLoadingView = imageLoadingLayout;
         return this;
     }
 
