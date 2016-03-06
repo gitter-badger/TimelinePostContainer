@@ -22,13 +22,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.github.alirezaaa.timelinepostcontainer.InitClass;
+import com.github.alirezaaa.timelinepostcontainer.utils.RecyclerPauseOnScrollListener;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SampleTwoActivity extends AppCompatActivity {
-
     private final String[] mLinks = {
             "http://collectup.blob.core.windows.net/videos/ce39daa3-cada-4e21-9342-1aa062d39324.mp4",
             "http://collectup.blob.core.windows.net/videos/fc16f22a-e458-4056-8218-1d17ddbadb37.mp4",

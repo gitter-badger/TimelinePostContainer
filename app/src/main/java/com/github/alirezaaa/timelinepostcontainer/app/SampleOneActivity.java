@@ -26,7 +26,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SampleOneActivity extends AppCompatActivity {
-
     @Bind(R.id.timelinePostContainer)
     public TimelinePostContainer timelinePostContainer;
 
