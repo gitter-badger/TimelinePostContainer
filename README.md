@@ -12,7 +12,7 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 * Compatible down to API Level 16
 * Try loading images again if there's a problem with internet connection
 * Native `VideoView`
-* Listeners (double tap, image click, image loading progress update, and etc.)
+* Listeners
 * Two kinds of posts supported (only images and videos with a thumbnail)
 * Determinate progress view while loading images
 * [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) used for loading and caching images
@@ -21,6 +21,8 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 * Compatible with using inside `RecyclerView`
 * Appropriate animations
 * Good performance
+* [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel) used to have a good customized similar progress view in API 16+.
+* Customizable
 
 ## Include to Project
 ### Provide the Gradle Dependency
@@ -69,7 +71,6 @@ Clone this repository or download the compressed file, then extract to your comp
 You just have to provide the `ImageLoader` and your desired image and/or video paths as I did below or simply compile and try the sample `app` provided:
 ```java
 public class SampleActivity extends AppCompatActivity {
-
     @Bind(R.id.timelinePostContainer)
     TimelinePostContainer timelinePostContainer;
 
@@ -78,16 +79,39 @@ public class SampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_one);
 
-        timelinePostContainer.setImageLoader(MyApplication.getInstance().getImageLoader());
-
         timelinePostContainer.setImagePath("image path");
         timelinePostContainer.setVideoPath("video path if you need the video implementation");
-        timelinePostContainer.build(Type.VIDEO); //or Type.IMAGE if you need the image implementation
+        timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image implementation
     }
 }
 ```
 
-## Apps Used
+### Useful Tips
+- To avoid scrolling lags you can use `PauseOnScrollListener` or `RecyclerPauseOnScrollListener`:
+```java
+recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(InitClass.imageLoader(this), false, true));
+```
+
+## Customization
+You can use good configured default `ImageLoader` or pass your customized one:
+```java
+timelinePostContainer.setImageLoader(ImageLoader.getInstance());
+```
+
+If you prefer customized image and video loadings, you must write following lines before building the view:
+```java
+timelinePostContainer.setImageLoadingView(R.layout.customized_image_loading); // or setImageLoadingView(ProgressWheel)
+timelinePostContainer.setVideoLoadingView(R.layout.customized_video_loading); // or setVideoLoadingView(AVLoadingIndicatorView)
+timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image implementation
+```
+
+## Listeners
+- `IListener` includes (`onImageRemove(Animator)`, `onImageCreate(ImageView)`, `onVideoCreate(VideoView)`)
+- `IDoubleTapListener` includes (`onImageDoubleTap(MotionEvent)`)
+- `IImageLoadingListener` includes (`onProgressUpdate(String, View, int, int)`)
+- `IImageClickListener` includes (`onImageClick(MotionEvent)`)
+
+## Libraries Used
 - [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
 
 ## Apps Using the TimelinePostContainer
