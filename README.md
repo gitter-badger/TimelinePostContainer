@@ -15,13 +15,12 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 * Listeners
 * Two kinds of posts supported (only images and videos with a thumbnail)
 * Determinate progress view while loading images
-* [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) used for loading and caching images
+* Caching images
 * Plays only one video at a time
 * Play and/or pause videos with a drawable
 * Compatible with using inside `RecyclerView`
 * Appropriate animations
 * Good performance
-* [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel) used to have a good customized similar progress view in API 16+.
 * Customizable
 
 ## Include to Project
@@ -94,12 +93,12 @@ recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(InitClass.ima
 ```
 
 ## Customization
-You can use good configured default `ImageLoader` or pass your customized one:
+* You can use good configured default `ImageLoader` or pass your customized one:
 ```java
 timelinePostContainer.setImageLoader(ImageLoader.getInstance());
 ```
 
-If you prefer customized image and video loadings, you must write following lines before building the view:
+* If you prefer customized image and video loadings, you must write following lines before building the view:
 ```java
 timelinePostContainer.setImageLoadingView(R.layout.customized_image_loading); // or setImageLoadingView(ProgressWheel)
 timelinePostContainer.setVideoLoadingView(R.layout.customized_video_loading); // or setVideoLoadingView(AVLoadingIndicatorView)
@@ -113,9 +112,9 @@ timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image 
 - `IImageClickListener` includes (`onImageClick(MotionEvent)`)
 
 ## Libraries Used
-- [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
-- [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel)
-- [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView)
+- [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) - loading and caching images
+- [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel) - customized and similar progress view in API 16+
+- [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - animated video loading view
 
 ## Apps Using the TimelinePostContainer
 *feel free to send me new projects.*
