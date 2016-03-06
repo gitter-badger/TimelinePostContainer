@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.app;
+package com.github.alirezaaa.timelinepostcontainer.utils;
 
 import android.support.v7.widget.RecyclerView;
 
