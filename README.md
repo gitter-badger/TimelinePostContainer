@@ -78,6 +78,7 @@ public class SampleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_one);
+		ButterKnife.bind(this);
 
         timelinePostContainer.setImagePath("image path");
         timelinePostContainer.setVideoPath("video path if you need the video implementation");
@@ -113,6 +114,8 @@ timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image 
 
 ## Libraries Used
 - [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
+- [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel)
+- [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView)
 
 ## Apps Using the TimelinePostContainer
 *feel free to send me new projects.*
