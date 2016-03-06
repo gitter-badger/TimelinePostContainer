@@ -18,7 +18,7 @@ package com.github.alirezaaa.timelinepostcontainer.interfaces;
 
 import android.view.View;
 
-public interface IImageLoading {
+public interface IImageLoadingListener {
     /**
      * Is called when image loading progress changed.
      *
