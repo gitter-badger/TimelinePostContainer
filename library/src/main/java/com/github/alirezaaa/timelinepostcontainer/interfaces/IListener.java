@@ -20,7 +20,7 @@ import android.animation.Animator;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-public interface ICallback {
+public interface IListener {
     void onImageRemove(Animator animation);
 
     void onImageCreate(ImageView view);
