@@ -30,7 +30,7 @@ public final class InitClass {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
-                .displayer(new FadeInBitmapDisplayer(100, true, false, false))
+                .displayer(new FadeInBitmapDisplayer(500, true, false, false))
                 .build();
 
         // Create global configuration and initialize ImageLoader with this config
