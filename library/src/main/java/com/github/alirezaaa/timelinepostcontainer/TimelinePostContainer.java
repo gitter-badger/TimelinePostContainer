@@ -261,7 +261,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
             @Override
             public void onLoadingCancelled(String s, View view) {
-                // empty
+                // empty, intentional
             }
         }, new TimelinePostContainer.MyImageLoadingProgressListener());
     }
