@@ -98,7 +98,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
-       // setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
+        // setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
         customTypedArray.recycle();
     }
@@ -107,15 +107,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         View view = LayoutInflater.from(getContext()).inflate(videoLoadingLayout, this, false);
         if (AndroidUtils.isInstanceOf(view, AVLoadingIndicatorView.class, getResources())) {
             mVideoLoadingView = (AVLoadingIndicatorView) view;
-        }
-
-        return this;
-    }
-
-    public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
-        View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
-        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
-            mImageLoadingView = (ProgressWheel) view;
         }
 
         return this;
@@ -132,6 +123,15 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         super(context, attrs, defStyleAttr, defStyleRes);
         initAttrs(attrs);
         initProperties();
+    }
+
+    public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
+        View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
+        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
+            mImageLoadingView = (ProgressWheel) view;
+        }
+
+        return this;
     }
 
     public boolean isKeepScreenOnWhilePlaying() {
