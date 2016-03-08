@@ -231,7 +231,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if (mImageLoadingView.getParent() == null) {
-            removeForeground();
             addView(mImageLoadingView);
         }
     }
