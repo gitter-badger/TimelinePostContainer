@@ -39,10 +39,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.github.alirezaaa.timelinepostcontainer.interfaces.IDoubleTapListener;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageClickListener;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageLoadingListener;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.IListener;
+import com.github.alirezaaa.timelinepostcontainer.interfaces.ITapListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -65,7 +65,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private boolean mLooping;
     private IImageClickListener mImageClickListener;
     private GestureDetector mGestureDetector;
-    private IDoubleTapListener mDoubleTapListener;
+    private ITapListener mTapListener;
     private ImageLoader mImageLoader;
     private IListener mListener;
     private ImageView mImageView;
@@ -135,8 +135,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return this;
     }
 
-    public TimelinePostContainer setDoubleTapListener(IDoubleTapListener listener) {
-        mDoubleTapListener = listener;
+    public TimelinePostContainer setTapListener(ITapListener listener) {
+        mTapListener = listener;
         return this;
     }
 
@@ -308,17 +308,17 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mImageLoadingView;
     }
 
-    public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
-        mImageLoadingView = imageLoadingLayout;
-        return this;
-    }
-
     public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
         View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
         if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
             mImageLoadingView = (ProgressWheel) view;
         }
 
+        return this;
+    }
+
+    public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
+        mImageLoadingView = imageLoadingLayout;
         return this;
     }
 
@@ -510,20 +510,22 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (mDoubleTapListener != null) {
-                mDoubleTapListener.onImageDoubleTap(e);
+            if (mTapListener != null) {
+                mTapListener.onDoubleTap(e, mType);
             }
 
-            return true;
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (mTapListener != null) {
+                mTapListener.onSingleTap(e, mType);
+            }
+            
+            return super.onSingleTapConfirmed(e);
         }
     }
 
