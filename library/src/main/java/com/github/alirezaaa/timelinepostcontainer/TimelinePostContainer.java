@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -95,8 +96,29 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
         mForeground = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_foreground);
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
+        mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
+        setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
+       // setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
         customTypedArray.recycle();
+    }
+
+    public TimelinePostContainer setVideoLoadingView(@LayoutRes int videoLoadingLayout) {
+        View view = LayoutInflater.from(getContext()).inflate(videoLoadingLayout, this, false);
+        if (AndroidUtils.isInstanceOf(view, AVLoadingIndicatorView.class, getResources())) {
+            mVideoLoadingView = (AVLoadingIndicatorView) view;
+        }
+
+        return this;
+    }
+
+    public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
+        View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
+        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
+            mImageLoadingView = (ProgressWheel) view;
+        }
+
+        return this;
     }
 
     public TimelinePostContainer(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -116,17 +138,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mKeepScreenOnWhilePlaying;
     }
 
-    public TimelinePostContainer setKeepScreenOnWhilePlaying(boolean keepScreenOnWhilePlaying) {
-        mKeepScreenOnWhilePlaying = keepScreenOnWhilePlaying;
-        return this;
-    }
-
-    public TimelinePostContainer setVideoLoadingView(@LayoutRes int videoLoadingLayout) {
-        View view = LayoutInflater.from(getContext()).inflate(videoLoadingLayout, this, false);
-        if (AndroidUtils.isInstanceOf(view, AVLoadingIndicatorView.class, getResources())) {
-            mVideoLoadingView = (AVLoadingIndicatorView) view;
-        }
-
+    public TimelinePostContainer setKeepScreenOnWhilePlaying(boolean keepScreenOn) {
+        mKeepScreenOnWhilePlaying = keepScreenOn;
         return this;
     }
 
@@ -308,15 +321,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mImageLoadingView;
     }
 
-    public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
-        View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
-        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
-            mImageLoadingView = (ProgressWheel) view;
-        }
-
-        return this;
-    }
-
     public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
         mImageLoadingView = imageLoadingLayout;
         return this;
@@ -342,8 +346,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if ((v instanceof VideoView) && (event.getAction() == MotionEvent.ACTION_UP)) {
-            if (((VideoView) v).isPlaying()) {
-                ((VideoView) v).pause();
+            if (((MediaController.MediaPlayerControl) v).isPlaying()) {
+                ((MediaController.MediaPlayerControl) v).pause();
                 removeImageLoadingView();
                 setPlayForeground();
             } else {
