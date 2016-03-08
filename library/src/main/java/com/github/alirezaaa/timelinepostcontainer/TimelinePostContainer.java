@@ -366,7 +366,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     /**
-     * Sets the set foreground
+     * Sets the foreground
      */
     private void setPlayForeground() {
         setForeground(mForeground);
@@ -524,7 +524,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             if (mTapListener != null) {
                 mTapListener.onSingleTap(e, mType);
             }
-            
+
             return super.onSingleTapConfirmed(e);
         }
     }
