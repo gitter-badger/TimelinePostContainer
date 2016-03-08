@@ -22,5 +22,6 @@ import com.github.alirezaaa.timelinepostcontainer.Type;
 
 public interface ITapListener {
     void onDoubleTap(MotionEvent e, Type type);
+
     void onSingleTap(MotionEvent e, Type type);
 }
