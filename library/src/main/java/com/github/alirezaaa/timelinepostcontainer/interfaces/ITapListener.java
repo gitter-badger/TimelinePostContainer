@@ -18,6 +18,9 @@ package com.github.alirezaaa.timelinepostcontainer.interfaces;
 
 import android.view.MotionEvent;
 
-public interface IDoubleTapListener {
-    void onImageDoubleTap(MotionEvent e);
+import com.github.alirezaaa.timelinepostcontainer.Type;
+
+public interface ITapListener {
+    void onDoubleTap(MotionEvent e, Type type);
+    void onSingleTap(MotionEvent e, Type type);
 }
