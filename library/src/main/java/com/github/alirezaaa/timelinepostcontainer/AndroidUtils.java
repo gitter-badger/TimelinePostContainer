@@ -36,7 +36,7 @@ final class AndroidUtils {
     }
 
     static boolean isInstanceOf(View view, Class instance, Resources resources) {
-        if (!instance.getClass().isInstance(view)) {
+        if (!instance.isInstance(view)) {
             throw new IllegalArgumentException(String.format(resources.getString(R.string.not_instance_of), instance.getSimpleName()));
         }
 
