@@ -106,10 +106,7 @@ timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image 
 ```
 
 ## Listeners
-- `IListener` includes (`onImageRemove(Animator)`, `onImageCreate(ImageView)`, `onVideoCreate(VideoView)`)
-- `IDoubleTapListener` includes (`onImageDoubleTap(MotionEvent)`)
-- `IImageLoadingListener` includes (`onProgressUpdate(String, View, int, int)`)
-- `IImageClickListener` includes (`onImageClick(MotionEvent)`)
+Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer/tree/master/library/src/main/java/com/github/alirezaaa/timelinepostcontainer/interfaces) for more details.
 
 ## Libraries Used
 - [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) - loading and caching images
