@@ -63,7 +63,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private String mVideoPath;
     private Type mType;
     private Drawable mForeground;
-    private boolean mLooping;
+    private boolean mLooping = true;
     private IImageClickListener mImageClickListener;
     private GestureDetector mGestureDetector;
     private ITapListener mTapListener;
@@ -78,17 +78,30 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         initProperties();
     }
 
+    public TimelinePostContainer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initAttrs(attrs);
+        initProperties();
+    }
+
+    public TimelinePostContainer(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initAttrs(attrs);
+        initProperties();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public TimelinePostContainer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initAttrs(attrs);
+        initProperties();
+    }
+
     private void initProperties() {
         mImageLoader = InitClass.imageLoader(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
 
         setForegroundGravity(Gravity.CENTER);
-    }
-
-    public TimelinePostContainer(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initAttrs(attrs);
-        initProperties();
     }
 
     private void initAttrs(AttributeSet attrs) {
@@ -110,19 +123,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         return this;
-    }
-
-    public TimelinePostContainer(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initAttrs(attrs);
-        initProperties();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public TimelinePostContainer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initAttrs(attrs);
-        initProperties();
     }
 
     public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
@@ -500,38 +500,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return this;
     }
 
-    private static class MyImageLoadingProgressListener implements ImageLoadingProgressListener {
-        @Override
-        public void onProgressUpdate(String s, View view, int i, int i1) {
-            int progress = (360 * i) / i1;
-            mImageLoadingView.setProgress(progress);
-
-            if (mImageLoadingListener != null) {
-                mImageLoadingListener.onProgressUpdate(s, view, i, i1);
-            }
-        }
-    }
-
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            if (mTapListener != null) {
-                mTapListener.onDoubleTap(e, mType);
-            }
-
-            return super.onDoubleTap(e);
-        }
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (mTapListener != null) {
-                mTapListener.onSingleTap(e, mType);
-            }
-
-            return super.onSingleTapConfirmed(e);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         if (v instanceof ImageView) {
@@ -597,6 +565,38 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             } else if ((mType == Type.IMAGE) && (mImageClickListener != null)) {
                 mImageClickListener.onImageClick(v);
             }
+        }
+    }
+
+    private static class MyImageLoadingProgressListener implements ImageLoadingProgressListener {
+        @Override
+        public void onProgressUpdate(String s, View view, int i, int i1) {
+            int progress = (360 * i) / i1;
+            mImageLoadingView.setProgress(progress);
+
+            if (mImageLoadingListener != null) {
+                mImageLoadingListener.onProgressUpdate(s, mImageLoadingView, view, i, i1);
+            }
+        }
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            if (mTapListener != null) {
+                mTapListener.onDoubleTap(e, mType);
+            }
+
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (mTapListener != null) {
+                mTapListener.onSingleTap(e, mType);
+            }
+
+            return super.onSingleTapConfirmed(e);
         }
     }
 }
