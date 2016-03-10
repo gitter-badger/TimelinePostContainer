@@ -18,6 +18,8 @@ package com.github.alirezaaa.timelinepostcontainer.interfaces;
 
 import android.view.View;
 
+import com.github.alirezaaa.timelinepostcontainer.Type;
+
 public interface IImageClickListener {
-    void onImageClick(View view);
+    void onImageClick(View view, Type type);
 }
