@@ -270,19 +270,14 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             @Override
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                 if (mType == Type.VIDEO) {
-                    mImageView.setClickable(true);
                     mImageView.setOnClickListener(TimelinePostContainer.this);
 
                     setPlayForeground();
                 } else {
-                    // we should set clickable to false and pass null to the click listener,
-                    // because the listener exists withing RecyclerView.
-                    mImageView.setClickable(false);
                     mImageView.setOnClickListener(TimelinePostContainer.this);
                     mImageView.setOnTouchListener(TimelinePostContainer.this);
-
-                    removeForeground();
                 }
+
                 removeImageLoadingView();
             }
 
@@ -573,8 +568,10 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 if (mListener != null) {
                     mListener.onVideoCreate(videoView);
                 }
-            } else if ((mType == Type.IMAGE) && (mImageClickListener != null)) {
-                mImageClickListener.onImageClick(v);
+            }
+
+            if (mImageClickListener != null) {
+                mImageClickListener.onImageClick(v, mType);
             }
         }
     }
