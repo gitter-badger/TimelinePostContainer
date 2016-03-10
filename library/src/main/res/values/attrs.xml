@@ -22,5 +22,6 @@
         <attr name="tpc_keepOnScreen" format="boolean"/>
         <attr name="tpc_videoLoading" format="reference"/>
         <attr name="tpc_imageLoading" format="reference"/>
+        <attr name="tpc_debug" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -72,6 +72,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private ImageView mImageView;
     private AVLoadingIndicatorView mVideoLoadingView;
     private boolean mKeepScreenOnWhilePlaying = true;
+    private boolean mDebug;
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -97,6 +98,15 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         initProperties();
     }
 
+    public boolean isDebug() {
+        return mDebug;
+    }
+
+    public TimelinePostContainer setDebug(boolean debug) {
+        mDebug = debug;
+        return this;
+    }
+
     private void initProperties() {
         mImageLoader = InitClass.imageLoader(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
@@ -110,6 +120,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         mForeground = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_foreground);
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
+        mDebug = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_debug, false);
         setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
         setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
@@ -192,6 +203,10 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
         if (mListener != null) {
             mListener.onImageCreate(view);
+        }
+
+        if (mDebug) {
+            Log.d(TAG, mVideoPath);
         }
     }
 
@@ -308,10 +323,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         /*HttpProxyCacheServer proxy = MyApplication.getProxy(getContext());
         this.mVideoPath = proxy.getProxyUrl(mVideoPath);*/
         mVideoPath = videoPath;
-
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, videoPath);
-        }
 
         return this;
     }
