@@ -111,7 +111,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
-        // setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
+        setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
         customTypedArray.recycle();
     }
