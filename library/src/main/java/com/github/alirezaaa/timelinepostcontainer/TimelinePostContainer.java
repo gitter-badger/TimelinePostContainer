@@ -30,7 +30,6 @@ import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -110,8 +109,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private void initProperties() {
         mImageLoader = InitClass.imageLoader(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
-
-        setForegroundGravity(Gravity.CENTER);
     }
 
     private void initAttrs(AttributeSet attrs) {
@@ -122,7 +119,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             mForeground = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_outline_gray_big);
         }
 
-        mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
+        mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, true);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         mDebug = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_debug, false);
         setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
@@ -378,28 +375,32 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    /**
-     * Sets the foreground
-     */
     private void setPlayForeground() {
-        setForeground(mForeground);
+        ImageView view = (ImageView) findViewById(R.id.foreground);
+        if (view == null) {
+            view = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.foreground, this, false);
+            view.setImageDrawable(mForeground);
+            addView(view);
+        } else if (view.getVisibility() != VISIBLE) {
+            view.setVisibility(VISIBLE);
+        }
     }
 
     private void stopPreviousVideo() {
         if (mPreviousVideoView != null) {
             mPreviousVideoView.pause();
-            FrameLayout parentLayout = (FrameLayout) mPreviousVideoView.getParent();
+            TimelinePostContainer parentLayout = (TimelinePostContainer) mPreviousVideoView.getParent();
             if (parentLayout != null) {
-                parentLayout.setForeground(mForeground);
+                parentLayout.setPlayForeground();
             }
         }
     }
 
-    /**
-     * Removes the foreground
-     */
     private void removeForeground() {
-        setForeground(null);
+        View view = findViewById(R.id.foreground);
+        if (view != null) {
+            view.setVisibility(INVISIBLE);
+        }
     }
 
     @Override
