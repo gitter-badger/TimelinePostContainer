@@ -18,7 +18,8 @@
 <resources>
     <declare-styleable name="TimelinePostContainer">
         <attr name="tpc_looping" format="boolean"/>
-        <attr name="tpc_foreground" format="reference"/>
+        <attr name="tpc_playDrawable" format="reference"/>
+        <attr name="tpc_pauseDrawable" format="reference"/>
         <attr name="tpc_keepOnScreen" format="boolean"/>
         <attr name="tpc_videoLoading" format="reference"/>
         <attr name="tpc_imageLoading" format="reference"/>
