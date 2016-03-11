@@ -28,6 +28,15 @@ buildscript {
     }
 }
 
+ext {
+    compileSdkVersion = 23
+    buildToolsVersion = "23.0.2"
+    supportLibVersion = "23.2.0"
+
+    minSdkVersion = 16
+    targetSdkVersion = 23
+}
+
 allprojects {
     repositories {
         jcenter()
@@ -37,4 +46,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
 }

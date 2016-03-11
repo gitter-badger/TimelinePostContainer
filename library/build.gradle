@@ -17,13 +17,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 7
-        versionName '2.1.2'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 8
+        versionName '2.2'
     }
     buildTypes {
         release {
@@ -38,8 +38,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     compile 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
     compile 'com.github.alirezaaa:ProgressWheel:1.2'
     compile 'com.github.81813780:AVLoadingIndicatorView:1.0.1'

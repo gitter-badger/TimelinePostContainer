@@ -17,14 +17,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.github.alirezaaa.timelinepostcontainer.app"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 4
-        versionName '2.2'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 5
+        versionName '2.2.1'
     }
     buildTypes {
         release {
@@ -39,8 +39,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
     compile 'com.github.mikepenz.FastAdapter:library:v1.2.2'
     compile 'com.danikula:videocache:2.3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
