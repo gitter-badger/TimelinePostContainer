@@ -24,5 +24,6 @@
         <attr name="tpc_videoLoading" format="reference"/>
         <attr name="tpc_imageLoading" format="reference"/>
         <attr name="tpc_debug" format="boolean"/>
+        <attr name="tpc_drawablesAnim" format="reference"/>
     </declare-styleable>
 </resources>
