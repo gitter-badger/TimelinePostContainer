@@ -25,6 +25,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.support.annotation.AnimRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
@@ -33,6 +35,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -74,6 +77,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private boolean mDebug;
     private Drawable mPlayDrawable;
     private Drawable mPauseDrawable;
+    private Animation mDrawablesAnimation;
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -99,8 +103,27 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         initProperties();
     }
 
+    public Animation getDrawablesAnimation() {
+        return mDrawablesAnimation;
+    }
+
+    public TimelinePostContainer setDrawablesAnimation(@AnimRes int res) {
+        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), res);
+        return this;
+    }
+
+    public TimelinePostContainer setDrawablesAnimation(Animation drawablesAnimation) {
+        mDrawablesAnimation = drawablesAnimation;
+        return this;
+    }
+
     public Drawable getPauseDrawable() {
         return mPauseDrawable;
+    }
+
+    public TimelinePostContainer setPauseDrawable(@DrawableRes int res) {
+        mPauseDrawable = AndroidUtils.getDrawable(getResources(), res);
+        return this;
     }
 
     public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
@@ -114,6 +137,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
         mPlayDrawable = playDrawable;
+        return this;
+    }
+
+    public TimelinePostContainer setPlayDrawable(@DrawableRes int res) {
+        mPlayDrawable = AndroidUtils.getDrawable(getResources(), res);
         return this;
     }
 
@@ -138,10 +166,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         if (mPlayDrawable == null) {
             mPlayDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp);
         }
+
         mPauseDrawable = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_pauseDrawable);
         if (mPauseDrawable == null) {
             mPauseDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp);
         }
+
+        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_drawablesAnim, R.anim.foreground));
 
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, true);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
