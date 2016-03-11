@@ -17,7 +17,6 @@ Timeline is a famous and user-friendly feature these days; If you need to implem
 * Determinate progress view while loading images
 * Caching images
 * Plays only one video at a time
-* Play and/or pause videos with a drawable
 * Compatible with using inside `RecyclerView`
 * Appropriate animations
 * Good performance
@@ -87,18 +86,18 @@ public class SampleActivity extends AppCompatActivity {
 ```
 
 ### Useful Tips
-- To avoid scrolling lags you can use `PauseOnScrollListener` or `RecyclerPauseOnScrollListener`:
+To avoid scrolling lags you can use `PauseOnScrollListener` or `RecyclerPauseOnScrollListener`:
 ```java
 recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(InitClass.imageLoader(this), false, true));
 ```
 
 ## Customization
-* You can use good configured default `ImageLoader` or pass your customized one:
+You can use good configured default `ImageLoader` or pass your customized one:
 ```java
 timelinePostContainer.setImageLoader(ImageLoader.getInstance());
 ```
 
-* If you prefer customized image and video loadings, you must write following lines before building the view:
+If you prefer customized loading views, you must write following lines before building the view:
 ```java
 timelinePostContainer.setImageLoadingView(R.layout.customized_image_loading); // or setImageLoadingView(ProgressWheel)
 timelinePostContainer.setVideoLoadingView(R.layout.customized_video_loading); // or setVideoLoadingView(AVLoadingIndicatorView)
@@ -108,10 +107,13 @@ timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image 
 ## Listeners
 Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer/tree/master/library/src/main/java/com/github/alirezaaa/timelinepostcontainer/interfaces) for more details.
 
+## Attributes
+Check out [attrs.xml](https://github.com/alirezaaa/TimelinePostContainer/blob/master/library/src/main/res/values/attrs.xml) for a complete list of supported attributes.
+
 ## Libraries Used
-- [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) - loading and caching images
-- [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel) - customized and similar progress view in API 16+
-- [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - animated video loading view
+- [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
+- [ProgressWheel](https://github.com/Todd-Davies/ProgressWheel)
+- [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView)
 
 ## Apps Using the TimelinePostContainer
 *feel free to send me new projects.*
