@@ -33,6 +33,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -61,7 +62,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private String mImagePath;
     private String mVideoPath;
     private Type mType;
-    private Drawable mForeground;
     private boolean mLooping = true;
     private IImageClickListener mImageClickListener;
     private GestureDetector mGestureDetector;
@@ -72,6 +72,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private AVLoadingIndicatorView mVideoLoadingView;
     private boolean mKeepScreenOnWhilePlaying = true;
     private boolean mDebug;
+    private Drawable mPlayDrawable;
+    private Drawable mPauseDrawable;
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -97,6 +99,24 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         initProperties();
     }
 
+    public Drawable getPauseDrawable() {
+        return mPauseDrawable;
+    }
+
+    public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
+        mPauseDrawable = pauseDrawable;
+        return this;
+    }
+
+    public Drawable getPlayDrawable() {
+        return mPlayDrawable;
+    }
+
+    public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
+        mPlayDrawable = playDrawable;
+        return this;
+    }
+
     public boolean isDebug() {
         return mDebug;
     }
@@ -114,9 +134,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private void initAttrs(AttributeSet attrs) {
         TypedArray customTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TimelinePostContainer);
 
-        mForeground = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_foreground);
-        if (mForeground == null) {
-            mForeground = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_outline_gray_big);
+        mPlayDrawable = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_playDrawable);
+        if (mPlayDrawable == null) {
+            mPlayDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp);
+        }
+        mPauseDrawable = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_pauseDrawable);
+        if (mPauseDrawable == null) {
+            mPauseDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp);
         }
 
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, true);
@@ -355,13 +379,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             if (((MediaController.MediaPlayerControl) v).isPlaying()) {
                 ((MediaController.MediaPlayerControl) v).pause();
                 removeImageLoadingView();
-                showForeground();
+                pauseVideo();
             } else {
                 mPreviousVideoView = mCurrentVideoView;
                 mCurrentVideoView = ((VideoView) v);
                 stopPreviousVideo();
 
-                hideForeground();
+                showForeground();
                 mCurrentVideoView.start();
             }
         }
@@ -379,10 +403,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view == null) {
             view = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.foreground, this, false);
-            view.setImageDrawable(mForeground);
+            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp));
             addView(view);
-        } else if (view.getVisibility() != VISIBLE) {
-            view.setVisibility(VISIBLE);
+        } else {
+            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp));
+            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.foreground));
         }
     }
 
@@ -396,10 +421,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private void hideForeground() {
-        View view = findViewById(R.id.foreground);
+    private void pauseVideo() {
+        ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view != null) {
-            view.setVisibility(INVISIBLE);
+            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp));
+            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.foreground));
         }
     }
 
@@ -421,7 +447,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         // this is a workaround because API 16 doesn't support setOnInfoListener()
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isImageViewExists()) {
-            hideForeground();
             removeVideoLoadingView();
             removeImage();
         }
@@ -492,7 +517,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if (mVideoLoadingView.getParent() == null) {
-            hideForeground();
+            showForeground();
             addView(mVideoLoadingView);
         }
     }
@@ -542,7 +567,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                         @Override
                         public boolean onInfo(MediaPlayer mp, int what, int extra) {
                             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                                hideForeground();
                                 removeImageLoadingView();
                                 removeImage();
                             }
