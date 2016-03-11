@@ -18,6 +18,9 @@ package com.github.alirezaaa.timelinepostcontainer;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,5 +44,12 @@ final class AndroidUtils {
         }
 
         return true;
+    }
+
+    static Drawable getDrawable(Resources resources, @DrawableRes int res) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return resources.getDrawable(res, null);
+        }
+        return resources.getDrawable(res);
     }
 }

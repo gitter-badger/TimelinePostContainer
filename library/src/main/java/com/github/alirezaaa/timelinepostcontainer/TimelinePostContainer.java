@@ -118,6 +118,10 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         TypedArray customTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TimelinePostContainer);
 
         mForeground = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_foreground);
+        if (mForeground == null) {
+            mForeground = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_outline_gray_big);
+        }
+
         mLooping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, false);
         mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         mDebug = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_debug, false);
