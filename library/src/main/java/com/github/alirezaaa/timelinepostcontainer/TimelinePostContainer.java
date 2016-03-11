@@ -235,7 +235,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private TextView createExplanatoryView(@StringRes int text) {
         removeImageLoadingView();
 
-        TextView textView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.unable_load_image, this, false);
+        TextView textView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.explanatory_view, this, false);
         textView.setText(text);
 
         return textView;
@@ -251,8 +251,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private void addErrorView() {
-        addView(createExplanatoryView(R.string.unable_load_image));
+    private void unablePlayVideo() {
+        addView(createExplanatoryView(R.string.unable_play_video));
     }
 
     private void displayImage() {
@@ -532,7 +532,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(MediaPlayer mp, int what, int extra) {
-                        addErrorView();
+                        unablePlayVideo();
                         return true;
                     }
                 });
