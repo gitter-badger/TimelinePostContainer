@@ -460,14 +460,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     /**
-     * Removes the image.
+     * Remove the image with fading effect.
      */
     private void removeImage() {
         int childCounts = getChildCount();
         for (int child = 0; child < childCounts; child++) {
             final View view = getChildAt(child);
             if (view instanceof ImageView) {
-                // animate removing image.
                 view.animate()
                         .alpha(0.0f)
                         .setListener(new AnimatorListenerAdapter() {
