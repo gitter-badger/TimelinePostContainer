@@ -16,16 +16,13 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer
         android:id="@+id/timelinePostContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:tpc_foreground="@drawable/ic_play_circle_outline_gray_big"
-        app:tpc_looping="true">
+        android:layout_height="match_parent">
 
     </com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer>
 
