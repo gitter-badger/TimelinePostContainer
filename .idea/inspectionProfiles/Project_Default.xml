@@ -526,10 +526,6 @@
       <option name="m_includeLibraryClasses" value="false" />
       <option name="m_limit" value="10" />
     </inspection_tool>
-    <inspection_tool class="MethodMayBeStatic" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="m_onlyPrivateOrFinal" value="false" />
-      <option name="m_ignoreEmptyMethods" value="true" />
-    </inspection_tool>
     <inspection_tool class="MethodMayBeSynchronized" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodNameSameAsParentName" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodNamesDifferOnlyByCase" enabled="true" level="WARNING" enabled_by_default="true" />
