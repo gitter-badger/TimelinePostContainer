@@ -273,7 +273,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 if (mType == Type.VIDEO) {
                     mImageView.setOnClickListener(TimelinePostContainer.this);
 
-                    setPlayForeground();
+                    showForeground();
                 } else {
                     mImageView.setOnClickListener(TimelinePostContainer.this);
                     mImageView.setOnTouchListener(TimelinePostContainer.this);
@@ -355,13 +355,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             if (((MediaController.MediaPlayerControl) v).isPlaying()) {
                 ((MediaController.MediaPlayerControl) v).pause();
                 removeImageLoadingView();
-                setPlayForeground();
+                showForeground();
             } else {
                 mPreviousVideoView = mCurrentVideoView;
                 mCurrentVideoView = ((VideoView) v);
                 stopPreviousVideo();
 
-                removeForeground();
+                hideForeground();
                 mCurrentVideoView.start();
             }
         }
@@ -375,7 +375,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private void setPlayForeground() {
+    private void showForeground() {
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view == null) {
             view = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.foreground, this, false);
@@ -391,12 +391,12 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             mPreviousVideoView.pause();
             TimelinePostContainer parentLayout = (TimelinePostContainer) mPreviousVideoView.getParent();
             if (parentLayout != null) {
-                parentLayout.setPlayForeground();
+                parentLayout.showForeground();
             }
         }
     }
 
-    private void removeForeground() {
+    private void hideForeground() {
         View view = findViewById(R.id.foreground);
         if (view != null) {
             view.setVisibility(INVISIBLE);
@@ -421,7 +421,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         // this is a workaround because API 16 doesn't support setOnInfoListener()
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) && isImageViewExists()) {
-            removeForeground();
+            hideForeground();
             removeVideoLoadingView();
             removeImage();
         }
@@ -493,7 +493,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if (mVideoLoadingView.getParent() == null) {
-            removeForeground();
+            hideForeground();
             addView(mVideoLoadingView);
         }
     }
@@ -502,7 +502,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     public void onCompletion(MediaPlayer mp) {
         removeImageLoadingView();
         if (!mLooping) {
-            setPlayForeground();
+            showForeground();
         }
     }
 
@@ -543,7 +543,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                         @Override
                         public boolean onInfo(MediaPlayer mp, int what, int extra) {
                             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                                removeForeground();
+                                hideForeground();
                                 removeImageLoadingView();
                                 removeImage();
                             }
