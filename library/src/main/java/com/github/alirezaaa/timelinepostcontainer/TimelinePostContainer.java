@@ -297,7 +297,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 if (mType == Type.VIDEO) {
                     mImageView.setOnClickListener(TimelinePostContainer.this);
 
-                    showForeground();
+                    showPlayDrawable();
                 } else {
                     mImageView.setOnClickListener(TimelinePostContainer.this);
                     mImageView.setOnTouchListener(TimelinePostContainer.this);
@@ -379,13 +379,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             if (((MediaController.MediaPlayerControl) v).isPlaying()) {
                 ((MediaController.MediaPlayerControl) v).pause();
                 removeImageLoadingView();
-                pauseVideo();
+                showPauseDrawable();
             } else {
                 mPreviousVideoView = mCurrentVideoView;
                 mCurrentVideoView = ((VideoView) v);
                 stopPreviousVideo();
 
-                showForeground();
+                showPlayDrawable();
                 mCurrentVideoView.start();
             }
         }
@@ -399,7 +399,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private void showForeground() {
+    private void showPlayDrawable() {
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view == null) {
             view = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.foreground, this, false);
@@ -416,12 +416,12 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             mPreviousVideoView.pause();
             TimelinePostContainer parentLayout = (TimelinePostContainer) mPreviousVideoView.getParent();
             if (parentLayout != null) {
-                parentLayout.showForeground();
+                parentLayout.showPlayDrawable();
             }
         }
     }
 
-    private void pauseVideo() {
+    private void showPauseDrawable() {
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view != null) {
             view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp));
@@ -517,7 +517,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if (mVideoLoadingView.getParent() == null) {
-            showForeground();
+            showPlayDrawable();
             addView(mVideoLoadingView);
         }
     }
@@ -526,7 +526,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     public void onCompletion(MediaPlayer mp) {
         removeImageLoadingView();
         if (!mLooping) {
-            showForeground();
+            showPlayDrawable();
         }
     }
 
