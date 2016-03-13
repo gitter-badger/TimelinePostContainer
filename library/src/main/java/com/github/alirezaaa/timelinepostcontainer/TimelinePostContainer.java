@@ -548,7 +548,6 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
 
         if (mVideoLoadingView.getParent() == null) {
-            showPlayDrawable();
             addView(mVideoLoadingView);
         }
     }
@@ -578,6 +577,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
                 // prevents from preparing the video multiple times by multiple clicking on the image.
                 v.setOnClickListener(null);
 
+                showPlayDrawable();
                 addVideoLoading();
 
                 final VideoView videoView = (VideoView) LayoutInflater.from(getContext()).inflate(R.layout.video_view, this, false);
