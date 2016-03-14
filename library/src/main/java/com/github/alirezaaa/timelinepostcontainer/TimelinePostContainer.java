@@ -27,6 +27,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.AnimRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
@@ -49,12 +50,10 @@ import com.github.alirezaaa.timelinepostcontainer.interfaces.IListener;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.ITapListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public class TimelinePostContainer extends FrameLayout implements View.OnClickListener, View.OnTouchListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
+public class TimelinePostContainer extends FrameLayout implements Listener, View.OnClickListener, View.OnTouchListener {
 
     private static final String TAG = TimelinePostContainer.class.getSimpleName();
     private static VideoView mCurrentVideoView;
@@ -78,6 +77,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     private Drawable mPlayDrawable;
     private Drawable mPauseDrawable;
     private Animation mDrawablesAnimation;
+    @IdRes
+    private int mImageId;
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -107,13 +108,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mDrawablesAnimation;
     }
 
-    public TimelinePostContainer setDrawablesAnimation(@AnimRes int res) {
-        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), res);
+    public TimelinePostContainer setDrawablesAnimation(Animation drawablesAnimation) {
+        mDrawablesAnimation = drawablesAnimation;
         return this;
     }
 
-    public TimelinePostContainer setDrawablesAnimation(Animation drawablesAnimation) {
-        mDrawablesAnimation = drawablesAnimation;
+    public TimelinePostContainer setDrawablesAnimation(@AnimRes int res) {
+        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), res);
         return this;
     }
 
@@ -121,13 +122,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mPauseDrawable;
     }
 
-    public TimelinePostContainer setPauseDrawable(@DrawableRes int res) {
-        mPauseDrawable = AndroidUtils.getDrawable(getResources(), res);
+    public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
+        mPauseDrawable = pauseDrawable;
         return this;
     }
 
-    public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
-        mPauseDrawable = pauseDrawable;
+    public TimelinePostContainer setPauseDrawable(@DrawableRes int res) {
+        mPauseDrawable = AndroidUtils.getDrawable(getResources(), res);
         return this;
     }
 
@@ -135,13 +136,13 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return mPlayDrawable;
     }
 
-    public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
-        mPlayDrawable = playDrawable;
+    public TimelinePostContainer setPlayDrawable(@DrawableRes int res) {
+        mPlayDrawable = AndroidUtils.getDrawable(getResources(), res);
         return this;
     }
 
-    public TimelinePostContainer setPlayDrawable(@DrawableRes int res) {
-        mPlayDrawable = AndroidUtils.getDrawable(getResources(), res);
+    public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
+        mPlayDrawable = playDrawable;
         return this;
     }
 
@@ -268,6 +269,8 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
 
     private ImageView createImageView() {
         mImageView = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.image_view, this, false);
+        mImageId = AndroidUtils.generateViewId();
+        mImageView.setId(mImageId);
 
         displayImage();
 
@@ -296,7 +299,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         return textView;
     }
 
-    private void addImageLoadingView() {
+    private void showImageLoadingView() {
         if (mImageLoadingView == null) {
             mImageLoadingView = AndroidUtils.createImageLoading(getContext(), this);
         }
@@ -311,37 +314,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private void displayImage() {
-        mImageLoader.displayImage(mImagePath, mImageView, null, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String s, View view) {
-                addImageLoadingView();
-            }
-
-            @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
-                removeImageLoadingView();
-                addTryAgainView();
-            }
-
-            @Override
-            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                if (mType == Type.VIDEO) {
-                    mImageView.setOnClickListener(TimelinePostContainer.this);
-
-                    showPlayDrawable();
-                } else {
-                    mImageView.setOnClickListener(TimelinePostContainer.this);
-                    mImageView.setOnTouchListener(TimelinePostContainer.this);
-                }
-
-                removeImageLoadingView();
-            }
-
-            @Override
-            public void onLoadingCancelled(String s, View view) {
-                // empty, intentional
-            }
-        }, new TimelinePostContainer.MyImageLoadingProgressListener());
+        mImageLoader.displayImage(mImagePath, mImageView, null, this, this);
     }
 
     public Type getType() {
@@ -370,7 +343,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     public TimelinePostContainer setVideoPath(String videoPath) {
-        // FIXME https://github.com/danikula/AndroidVideoCache/issues/60
+        // ISSUE: https://github.com/danikula/AndroidVideoCache/issues/60
         /*HttpProxyCacheServer proxy = MyApplication.getProxy(getContext());
         this.mVideoPath = proxy.getProxyUrl(mVideoPath);*/
         mVideoPath = videoPath;
@@ -403,22 +376,11 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (v instanceof ImageView) {
-            return (mType == Type.IMAGE) && mGestureDetector.onTouchEvent(event);
+            return onImageTouch(v, event);
         }
 
         if ((v instanceof VideoView) && (event.getAction() == MotionEvent.ACTION_UP)) {
-            if (((MediaController.MediaPlayerControl) v).isPlaying()) {
-                ((MediaController.MediaPlayerControl) v).pause();
-                removeImageLoadingView();
-                showPauseDrawable();
-            } else {
-                mPreviousVideoView = mCurrentVideoView;
-                mCurrentVideoView = ((VideoView) v);
-                stopPreviousVideo();
-
-                showPlayDrawable();
-                mCurrentVideoView.start();
-            }
+            onVideoTouch(v, event);
         }
 
         return true;
@@ -447,7 +409,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             mPreviousVideoView.pause();
             TimelinePostContainer parentLayout = (TimelinePostContainer) mPreviousVideoView.getParent();
             if (parentLayout != null) {
-                parentLayout.showPlayDrawable();
+                parentLayout.showPauseDrawable();
             }
         }
     }
@@ -490,7 +452,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         int duration = mp.getCurrentPosition();
 
         if ((duration == lastPlaybackPosition) && mp.isPlaying()) {
-            addVideoLoading();
+            showVideoLoading();
         } else if (mp.isPlaying()) {
             removeVideoLoadingView();
         }
@@ -498,15 +460,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
     }
 
     private boolean isImageViewExists() {
-        int childCounts = getChildCount();
-        for (int child = 0; child < childCounts; child++) {
-            View view = getChildAt(child);
-            if (view instanceof ImageView) {
-                return true;
-            }
-        }
-
-        return false;
+        return findViewById(mImageId) != null;
     }
 
     private void removeVideoLoadingView() {
@@ -520,29 +474,26 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
      */
     private void removeImage() {
         int childCounts = getChildCount();
-        for (int child = 0; child < childCounts; child++) {
-            final View view = getChildAt(child);
-            if (view instanceof ImageView) {
-                view.animate()
-                        .alpha(0.0f)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
+        final View view = findViewById(mImageId);
+        if (view != null) {
+            view.animate()
+                    .alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
 
-                                removeView(view);
+                            removeView(view);
 
-                                if (mListener != null) {
-                                    mListener.onImageRemove(animation);
-                                }
+                            if (mListener != null) {
+                                mListener.onImageRemove(animation);
                             }
-                        });
-                break;
-            }
+                        }
+                    });
         }
     }
 
-    private void addVideoLoading() {
+    private void showVideoLoading() {
         if (mVideoLoadingView == null) {
             mVideoLoadingView = AndroidUtils.createVideoLoading(getContext(), this);
         }
@@ -574,59 +525,7 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
             }
 
             if (mType == Type.VIDEO) {
-                // prevents from preparing the video multiple times by multiple clicking on the image.
-                v.setOnClickListener(null);
-
-                showPlayDrawable();
-                addVideoLoading();
-
-                final VideoView videoView = (VideoView) LayoutInflater.from(getContext()).inflate(R.layout.video_view, this, false);
-                videoView.setVideoPath(mVideoPath);
-                videoView.setKeepScreenOn(mKeepScreenOnWhilePlaying);
-                videoView.setOnTouchListener(this);
-
-                videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        unablePlayVideo();
-                        return true;
-                    }
-                });
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                        @Override
-                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                                removeImageLoadingView();
-                                removeImage();
-                            }
-                            return false;
-                        }
-                    });
-                }
-
-                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
-                        mp.setOnCompletionListener(TimelinePostContainer.this);
-                        mp.setLooping(mLooping);
-
-                        mPreviousVideoView = mCurrentVideoView;
-                        mCurrentVideoView = videoView;
-
-                        stopPreviousVideo();
-
-                        mp.start();
-                    }
-                });
-
-                addView(videoView, 0);
-
-                if (mListener != null) {
-                    mListener.onVideoCreate(videoView);
-                }
+                prepareVideo(v);
             }
 
             if (mImageClickListener != null) {
@@ -635,16 +534,122 @@ public class TimelinePostContainer extends FrameLayout implements View.OnClickLi
         }
     }
 
-    private static class MyImageLoadingProgressListener implements ImageLoadingProgressListener {
-        @Override
-        public void onProgressUpdate(String s, View view, int i, int i1) {
-            int progress = (360 * i) / i1;
-            mImageLoadingView.setProgress(progress);
+    @Override
+    public void onProgressUpdate(String s, View view, int i, int i1) {
+        int progress = (360 * i) / i1;
+        mImageLoadingView.setProgress(progress);
 
-            if (mImageLoadingListener != null) {
-                mImageLoadingListener.onProgressUpdate(s, mImageLoadingView, view, i, i1);
-            }
+        if (mImageLoadingListener != null) {
+            mImageLoadingListener.onProgressUpdate(s, mImageLoadingView, view, i, i1);
         }
+    }
+
+    @Override
+    public boolean onImageTouch(View v, MotionEvent event) {
+        return (mType == Type.IMAGE) && mGestureDetector.onTouchEvent(event);
+    }
+
+    @Override
+    public void prepareVideo(View v) {
+        // prevents from preparing the video multiple times by multiple clicking on the image.
+        v.setOnClickListener(null);
+
+        showPlayDrawable();
+        showVideoLoading();
+
+        final VideoView videoView = (VideoView) LayoutInflater.from(getContext()).inflate(R.layout.video_view, this, false);
+        videoView.setVideoPath(mVideoPath);
+        videoView.setKeepScreenOn(mKeepScreenOnWhilePlaying);
+        videoView.setOnTouchListener(this);
+
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                unablePlayVideo();
+                return true;
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                @Override
+                public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                    if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                        removeImageLoadingView();
+                        removeImage();
+                    }
+                    return false;
+                }
+            });
+        }
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
+                mp.setOnCompletionListener(TimelinePostContainer.this);
+                mp.setLooping(mLooping);
+
+                mPreviousVideoView = mCurrentVideoView;
+                mCurrentVideoView = videoView;
+
+                stopPreviousVideo();
+
+                mp.start();
+            }
+        });
+
+        addView(videoView, 0);
+
+        if (mListener != null) {
+            mListener.onVideoCreate(videoView);
+        }
+    }
+
+    @Override
+    public void onVideoTouch(View v, MotionEvent event) {
+        if (((MediaController.MediaPlayerControl) v).isPlaying()) {
+            ((MediaController.MediaPlayerControl) v).pause();
+            removeImageLoadingView();
+            showPauseDrawable();
+        } else {
+            mPreviousVideoView = mCurrentVideoView;
+            mCurrentVideoView = ((VideoView) v);
+            stopPreviousVideo();
+
+            showPlayDrawable();
+            mCurrentVideoView.start();
+        }
+    }
+
+    @Override
+    public void onLoadingStarted(String s, View view) {
+        showImageLoadingView();
+    }
+
+    @Override
+    public void onLoadingFailed(String s, View view, FailReason failReason) {
+        removeImageLoadingView();
+        addTryAgainView();
+    }
+
+    @Override
+    public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+        if (mType == Type.VIDEO) {
+            mImageView.setOnClickListener(this);
+
+            showPlayDrawable();
+        } else {
+            mImageView.setOnClickListener(this);
+            mImageView.setOnTouchListener(this);
+        }
+
+        removeImageLoadingView();
+    }
+
+    @Override
+    public void onLoadingCancelled(String s, View view) {
+        // empty, intentional
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
