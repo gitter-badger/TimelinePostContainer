@@ -75,7 +75,7 @@ public class SampleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sample_one);
+        setContentView(R.layout.sample);
 		ButterKnife.bind(this);
 
         timelinePostContainer.setImagePath("image path");
@@ -103,6 +103,35 @@ timelinePostContainer.setOptions(options);
 
 ## Listeners
 Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer/tree/master/library/src/main/java/com/github/alirezaaa/timelinepostcontainer/interfaces) for more details.
+
+```java
+public class SampleListening extends AppCompatActivity {
+    @Bind(R.id.timelinePostContainer)
+    public TimelinePostContainer timelinePostContainer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.sample);
+        ButterKnife.bind(this);
+
+        Listeners listeners = new Listeners();
+        listeners.mImageLoadingListener = new SampleListening.MyIImageLoadingListener();
+        timelinePostContainer.setListeners(listeners);
+
+        timelinePostContainer.setImagePath("image path");
+        timelinePostContainer.setVideoPath("video path if you need the video implementation");
+        timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image implementation
+    }
+
+    private static class MyIImageLoadingListener implements IImageLoadingListener {
+        @Override
+        public void onProgressUpdate(String imageUri, ProgressWheel progressView, View view, int current, int total) {
+            // ...
+        }
+    }
+}
+```
 
 ## Attributes
 Check out [attrs.xml](https://github.com/alirezaaa/TimelinePostContainer/blob/master/library/src/main/res/values/attrs.xml) for a complete list of supported attributes.
