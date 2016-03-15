@@ -105,7 +105,7 @@ timelinePostContainer.setOptions(options);
 Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer/tree/master/library/src/main/java/com/github/alirezaaa/timelinepostcontainer/interfaces) for more details.
 
 ```java
-public class SampleListening extends AppCompatActivity {
+public class SampleActivity extends AppCompatActivity {
     @Bind(R.id.timelinePostContainer)
     public TimelinePostContainer timelinePostContainer;
 
@@ -116,7 +116,7 @@ public class SampleListening extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Listeners listeners = new Listeners();
-        listeners.mImageLoadingListener = new SampleListening.MyIImageLoadingListener();
+        listeners.mImageLoadingListener = new SampleActivity.MyImageLoadingListener();
         timelinePostContainer.setListeners(listeners);
 
         timelinePostContainer.setImagePath("image path");
@@ -124,7 +124,7 @@ public class SampleListening extends AppCompatActivity {
         timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image implementation
     }
 
-    private static class MyIImageLoadingListener implements IImageLoadingListener {
+    private static class MyImageLoadingListener implements IImageLoadingListener {
         @Override
         public void onProgressUpdate(String imageUri, ProgressWheel progressView, View view, int current, int total) {
             // ...
