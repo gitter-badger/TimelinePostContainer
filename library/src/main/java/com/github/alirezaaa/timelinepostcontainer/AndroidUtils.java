@@ -34,11 +34,11 @@ public final class AndroidUtils {
 
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
-    static ProgressWheel createImageLoading(Context context, ViewGroup viewGroup) {
+    private static ProgressWheel createImageLoading(Context context, ViewGroup viewGroup) {
         return (ProgressWheel) LayoutInflater.from(context).inflate(R.layout.image_loading, viewGroup, false);
     }
 
-    static AVLoadingIndicatorView createVideoLoading(Context context, ViewGroup viewGroup) {
+    private static AVLoadingIndicatorView createVideoLoading(Context context, ViewGroup viewGroup) {
         return (AVLoadingIndicatorView) LayoutInflater.from(context).inflate(R.layout.video_loading, viewGroup, false);
     }
 
@@ -63,7 +63,7 @@ public final class AndroidUtils {
      *
      * @return a generated ID value
      */
-    static int generateViewId() {
+    private static int generateViewId() {
         while (true) {
             int result = sNextGeneratedId.get();
             // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
