@@ -26,7 +26,6 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -44,7 +43,6 @@ import android.widget.VideoView;
 import com.github.alirezaaa.timelinepostcontainer.options.Listeners;
 import com.github.alirezaaa.timelinepostcontainer.options.Options;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.todddavies.components.progressbar.ProgressWheel;
 
 public class TimelinePostContainer extends FrameLayout implements Listener, View.OnClickListener, View.OnTouchListener {
 
@@ -53,12 +51,11 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
     private static VideoView mCurrentVideoView;
     private GestureDetector mGestureDetector;
     private Options mOptions = new Options(getContext());
-    private ProgressWheel mImageLoadingView;
     private int lastPlaybackPosition;
     private String mImagePath;
     private String mVideoPath;
     private ImageView mImageView;
-    private Listeners mListeners;
+    private Listeners mListeners = new Listeners();
     private Type mType;
     @IdRes
     private int mImageId;
@@ -121,18 +118,9 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         mOptions.mKeepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         mOptions.mDebug = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_debug, false);
         mOptions.setVideoLoadingView(this, customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
-        setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
+        mOptions.setImageLoadingView(this, customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
         customTypedArray.recycle();
-    }
-
-    public TimelinePostContainer setImageLoadingView(@LayoutRes int imageLoadingLayout) {
-        View view = LayoutInflater.from(getContext()).inflate(imageLoadingLayout, this, false);
-        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, getResources())) {
-            mImageLoadingView = (ProgressWheel) view;
-        }
-
-        return this;
     }
 
     public void build(Type type) {
@@ -200,12 +188,12 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
     }
 
     private void showImageLoadingView() {
-        if (mImageLoadingView == null) {
-            mImageLoadingView = AndroidUtils.createImageLoading(getContext(), this);
+        if (mOptions.mImageLoadingView == null) {
+            mOptions.mImageLoadingView = AndroidUtils.createImageLoading(getContext(), this);
         }
 
-        if (mImageLoadingView.getParent() == null) {
-            addView(mImageLoadingView);
+        if (mOptions.mImageLoadingView.getParent() == null) {
+            addView(mOptions.mImageLoadingView);
         }
     }
 
@@ -251,15 +239,6 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         return this;
     }
 
-    public ProgressWheel getImageLoadingView() {
-        return mImageLoadingView;
-    }
-
-    public TimelinePostContainer setImageLoadingView(ProgressWheel imageLoadingLayout) {
-        mImageLoadingView = imageLoadingLayout;
-        return this;
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -282,8 +261,8 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
     }
 
     private void removeImageLoadingView() {
-        if (mImageLoadingView != null) {
-            removeView(mImageLoadingView);
+        if (mOptions.mImageLoadingView != null) {
+            removeView(mOptions.mImageLoadingView);
         }
     }
 
@@ -418,10 +397,10 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
     @Override
     public void onProgressUpdate(String s, View view, int i, int i1) {
         int progress = (360 * i) / i1;
-        mImageLoadingView.setProgress(progress);
+        mOptions.mImageLoadingView.setProgress(progress);
 
         if (mListeners.mImageLoadingListener != null) {
-            mListeners.mImageLoadingListener.onProgressUpdate(s, mImageLoadingView, view, i, i1);
+            mListeners.mImageLoadingListener.onProgressUpdate(s, mOptions.mImageLoadingView, view, i, i1);
         }
     }
 

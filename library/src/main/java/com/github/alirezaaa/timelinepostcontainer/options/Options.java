@@ -30,6 +30,7 @@ import android.view.animation.AnimationUtils;
 
 import com.github.alirezaaa.timelinepostcontainer.AndroidUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class Options {
@@ -42,6 +43,7 @@ public class Options {
     public Animation mDrawablesAnimation;
     public AVLoadingIndicatorView mVideoLoadingView;
     public ImageLoader mImageLoader;
+    public ProgressWheel mImageLoadingView;
 
     public Options(Context context) {
         mContext = context;
@@ -67,6 +69,15 @@ public class Options {
 
     public Options setPlayDrawable(@DrawableRes int res) {
         mPlayDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
+        return this;
+    }
+
+    public Options setImageLoadingView(ViewGroup viewGroup, @LayoutRes int imageLoadingLayout) {
+        View view = LayoutInflater.from(mContext).inflate(imageLoadingLayout, viewGroup, false);
+        if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, mContext.getResources())) {
+            mImageLoadingView = (ProgressWheel) view;
+        }
+
         return this;
     }
 }
