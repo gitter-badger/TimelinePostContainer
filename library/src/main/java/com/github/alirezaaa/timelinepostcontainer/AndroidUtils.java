@@ -30,7 +30,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class AndroidUtils {
+public final class AndroidUtils {
 
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
@@ -42,7 +42,7 @@ final class AndroidUtils {
         return (AVLoadingIndicatorView) LayoutInflater.from(context).inflate(R.layout.video_loading, viewGroup, false);
     }
 
-    static boolean isInstanceOf(View view, Class instance, Resources resources) {
+    public static boolean isInstanceOf(View view, Class instance, Resources resources) {
         if (!instance.isInstance(view)) {
             throw new IllegalArgumentException(String.format(resources.getString(R.string.not_instance_of), instance.getSimpleName()));
         }
@@ -50,7 +50,7 @@ final class AndroidUtils {
         return true;
     }
 
-    static Drawable getDrawable(Resources resources, @DrawableRes int res) {
+    public static Drawable getDrawable(Resources resources, @DrawableRes int res) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return resources.getDrawable(res, null);
         }
