@@ -55,11 +55,11 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 public class TimelinePostContainer extends FrameLayout implements Listener, View.OnClickListener, View.OnTouchListener {
 
-    private static final String TAG = TimelinePostContainer.class.getSimpleName();
-    private static VideoView mCurrentVideoView;
+    // previous and current video view fields must be static
     private static VideoView mPreviousVideoView;
-    private static ProgressWheel mImageLoadingView;
-    private static IImageLoadingListener mImageLoadingListener;
+    private static VideoView mCurrentVideoView;
+    private ProgressWheel mImageLoadingView;
+    private IImageLoadingListener mImageLoadingListener;
     private int lastPlaybackPosition;
     private String mImagePath;
     private String mVideoPath;
@@ -108,13 +108,13 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         return mDrawablesAnimation;
     }
 
-    public TimelinePostContainer setDrawablesAnimation(Animation drawablesAnimation) {
-        mDrawablesAnimation = drawablesAnimation;
+    public TimelinePostContainer setDrawablesAnimation(@AnimRes int res) {
+        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), res);
         return this;
     }
 
-    public TimelinePostContainer setDrawablesAnimation(@AnimRes int res) {
-        mDrawablesAnimation = AnimationUtils.loadAnimation(getContext(), res);
+    public TimelinePostContainer setDrawablesAnimation(Animation drawablesAnimation) {
+        mDrawablesAnimation = drawablesAnimation;
         return this;
     }
 
@@ -122,13 +122,13 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         return mPauseDrawable;
     }
 
-    public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
-        mPauseDrawable = pauseDrawable;
+    public TimelinePostContainer setPauseDrawable(@DrawableRes int res) {
+        mPauseDrawable = AndroidUtils.getDrawable(getResources(), res);
         return this;
     }
 
-    public TimelinePostContainer setPauseDrawable(@DrawableRes int res) {
-        mPauseDrawable = AndroidUtils.getDrawable(getResources(), res);
+    public TimelinePostContainer setPauseDrawable(Drawable pauseDrawable) {
+        mPauseDrawable = pauseDrawable;
         return this;
     }
 
@@ -136,13 +136,13 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         return mPlayDrawable;
     }
 
-    public TimelinePostContainer setPlayDrawable(@DrawableRes int res) {
-        mPlayDrawable = AndroidUtils.getDrawable(getResources(), res);
+    public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
+        mPlayDrawable = playDrawable;
         return this;
     }
 
-    public TimelinePostContainer setPlayDrawable(Drawable playDrawable) {
-        mPlayDrawable = playDrawable;
+    public TimelinePostContainer setPlayDrawable(@DrawableRes int res) {
+        mPlayDrawable = AndroidUtils.getDrawable(getResources(), res);
         return this;
     }
 
@@ -263,7 +263,7 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         }
 
         if (mDebug) {
-            Log.d(TAG, mVideoPath);
+            Log.d(TimelinePostContainer.class.getSimpleName(), mVideoPath);
         }
     }
 
