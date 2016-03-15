@@ -338,7 +338,6 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
      * Remove the image with fading effect.
      */
     private void removeImage() {
-        int childCounts = getChildCount();
         final View view = findViewById(mImageId);
         if (view != null) {
             view.animate()
