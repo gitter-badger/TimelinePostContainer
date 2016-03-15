@@ -66,7 +66,7 @@ Add the dependency:
 Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
 ## Usage
-You just have to provide the `ImageLoader` and your desired image and/or video paths as I did below or simply compile and try the sample `app` provided:
+You only need to provide your desired image and/or video paths as I did below or simply compile and try the sample `app` provided:
 ```java
 public class SampleActivity extends AppCompatActivity {
     @Bind(R.id.timelinePostContainer)
@@ -88,21 +88,18 @@ public class SampleActivity extends AppCompatActivity {
 ### Useful Tips
 To avoid scrolling lags you can use `PauseOnScrollListener` or `RecyclerPauseOnScrollListener`:
 ```java
-recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(InitClass.imageLoader(this), false, true));
+recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(ImageLoader, boolean, boolean));
 ```
+**Note:** `InitClass.imageLoader(this)` gives you the default `ImageLoader`.
 
 ## Customization
-You can use good configured default `ImageLoader` or pass your customized one:
+`Options` class gives you all options you can configure. For an example, I configure the `ImageLoader`:
 ```java
-timelinePostContainer.setImageLoader(ImageLoader.getInstance());
+Options options = new Options(getApplicationContext());
+options.mImageLoader = ImageLoader.getInstance(); // My desired configuration
+timelinePostContainer.setOptions(options);
 ```
-
-If you prefer customized loading views, you must write following lines before building the view:
-```java
-timelinePostContainer.setImageLoadingView(R.layout.customized_image_loading); // or setImageLoadingView(ProgressWheel)
-timelinePostContainer.setVideoLoadingView(R.layout.customized_video_loading); // or setVideoLoadingView(AVLoadingIndicatorView)
-timelinePostContainer.build(Type.VIDEO); // or Type.IMAGE if you need the image implementation
-```
+**Note:** The default `ImageLoader` configuration is good enough, modify this one only if you want different configuration.
 
 ## Listeners
 Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer/tree/master/library/src/main/java/com/github/alirezaaa/timelinepostcontainer/interfaces) for more details.
