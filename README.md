@@ -96,7 +96,7 @@ recyclerView.addOnScrollListener(new RecyclerPauseOnScrollListener(ImageLoader, 
 `Options` class gives you all options you can configure. For an example, I configure the `ImageLoader`:
 ```java
 Options options = new Options(getApplicationContext());
-options.mImageLoader = ImageLoader.getInstance(); // My desired configuration
+options.imageLoader = ImageLoader.getInstance(); // My desired configuration
 timelinePostContainer.setOptions(options);
 ```
 **Note:** The default `ImageLoader` configuration is good enough, modify this one only if you want different configuration.
@@ -116,7 +116,7 @@ public class SampleActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Listeners listeners = new Listeners();
-        listeners.mImageLoadingListener = new SampleActivity.MyImageLoadingListener();
+        listeners.imageLoading = new SampleActivity.MyImageLoadingListener();
         timelinePostContainer.setListeners(listeners);
 
         timelinePostContainer.setImagePath("image path");
