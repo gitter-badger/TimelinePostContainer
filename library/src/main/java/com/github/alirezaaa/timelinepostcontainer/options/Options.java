@@ -35,15 +35,15 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 public class Options {
     private final Context mContext;
-    public boolean mLooping = true;
-    public boolean mKeepScreenOnWhilePlaying = true;
-    public boolean mDebug;
-    public Drawable mPlayDrawable;
-    public Drawable mPauseDrawable;
-    public Animation mDrawablesAnimation;
-    public AVLoadingIndicatorView mVideoLoadingView;
-    public ImageLoader mImageLoader;
-    public ProgressWheel mImageLoadingView;
+    public boolean looping = true;
+    public boolean keepScreenOnWhilePlaying = true;
+    public boolean debug;
+    public Drawable playDrawable;
+    public Drawable pauseDrawable;
+    public Animation drawablesAnimation;
+    public AVLoadingIndicatorView videoLoadingView;
+    public ImageLoader imageLoader;
+    public ProgressWheel imageLoadingView;
 
     public Options(Context context) {
         mContext = context;
@@ -52,30 +52,30 @@ public class Options {
     public Options setVideoLoadingView(ViewGroup viewGroup, @LayoutRes int videoLoadingLayout) {
         View view = LayoutInflater.from(mContext).inflate(videoLoadingLayout, viewGroup, false);
         if (AndroidUtils.isInstanceOf(view, AVLoadingIndicatorView.class, mContext.getResources())) {
-            mVideoLoadingView = (AVLoadingIndicatorView) view;
+            videoLoadingView = (AVLoadingIndicatorView) view;
         }
         return this;
     }
 
     public Options setDrawablesAnimation(@AnimRes int res) {
-        mDrawablesAnimation = AnimationUtils.loadAnimation(mContext, res);
+        drawablesAnimation = AnimationUtils.loadAnimation(mContext, res);
         return this;
     }
 
     public Options setPauseDrawable(@DrawableRes int res) {
-        mPauseDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
+        pauseDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
         return this;
     }
 
     public Options setPlayDrawable(@DrawableRes int res) {
-        mPlayDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
+        playDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
         return this;
     }
 
-    public Options setImageLoadingView(ViewGroup viewGroup, @LayoutRes int imageLoadingLayout) {
-        View view = LayoutInflater.from(mContext).inflate(imageLoadingLayout, viewGroup, false);
+    public Options setImageLoadingView(ViewGroup viewGroup, @LayoutRes int layout) {
+        View view = LayoutInflater.from(mContext).inflate(layout, viewGroup, false);
         if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, mContext.getResources())) {
-            mImageLoadingView = (ProgressWheel) view;
+            imageLoadingView = (ProgressWheel) view;
         }
 
         return this;
