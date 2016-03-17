@@ -26,7 +26,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 /**
  * Private listeners used only by {@link TimelinePostContainer}
  */
-interface Listener extends ImageLoadingProgressListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, ImageLoadingListener {
+interface IListener extends ImageLoadingProgressListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, ImageLoadingListener {
     boolean onImageTouch(View v, MotionEvent event);
 
     void prepareVideo(View v);
