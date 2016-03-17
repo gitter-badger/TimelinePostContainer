@@ -44,7 +44,7 @@ import com.github.alirezaaa.timelinepostcontainer.options.Listeners;
 import com.github.alirezaaa.timelinepostcontainer.options.Options;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 
-public class TimelinePostContainer extends FrameLayout implements Listener, View.OnClickListener, View.OnTouchListener {
+public class TimelinePostContainer extends FrameLayout implements IListener, View.OnClickListener, View.OnTouchListener {
 
     // previous and current video view fields must be static
     private static VideoView mPreviousVideoView;
@@ -387,8 +387,8 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
                 prepareVideo(v);
             }
 
-            if (mListeners.imageClickListener != null) {
-                mListeners.imageClickListener.onImageClick(v, mType);
+            if (mListeners.imageClick != null) {
+                mListeners.imageClick.onImageClick(v, mType);
             }
         }
     }
@@ -398,8 +398,8 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
         int progress = (360 * i) / i1;
         mOptions.imageLoadingView.setProgress(progress);
 
-        if (mListeners.imageLoadingListener != null) {
-            mListeners.imageLoadingListener.onProgressUpdate(s, mOptions.imageLoadingView, view, i, i1);
+        if (mListeners.imageLoading != null) {
+            mListeners.imageLoading.onProgressUpdate(s, mOptions.imageLoadingView, view, i, i1);
         }
     }
 
@@ -514,8 +514,8 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (mListeners.tapListener != null) {
-                mListeners.tapListener.onDoubleTap(e, mType);
+            if (mListeners.tap != null) {
+                mListeners.tap.onDoubleTap(e, mType);
             }
 
             return super.onDoubleTap(e);
@@ -523,8 +523,8 @@ public class TimelinePostContainer extends FrameLayout implements Listener, View
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (mListeners.tapListener != null) {
-                mListeners.tapListener.onSingleTap(e, mType);
+            if (mListeners.tap != null) {
+                mListeners.tap.onSingleTap(e, mType);
             }
 
             return super.onSingleTapConfirmed(e);

@@ -22,8 +22,8 @@ import com.github.alirezaaa.timelinepostcontainer.interfaces.IListener;
 import com.github.alirezaaa.timelinepostcontainer.interfaces.ITapListener;
 
 public class Listeners {
-    public IImageClickListener imageClickListener;
-    public ITapListener tapListener;
+    public IImageClickListener imageClick;
+    public ITapListener tap;
     public IListener listener;
-    public IImageLoadingListener imageLoadingListener;
+    public IImageLoadingListener imageLoading;
 }
