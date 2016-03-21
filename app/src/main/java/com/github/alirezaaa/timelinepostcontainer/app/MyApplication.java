@@ -33,6 +33,10 @@ public class MyApplication extends Application {
         return (app.proxy == null) ? ((app.proxy = app.newProxy())) : app.proxy;
     }
 
+    public static synchronized MyApplication getInstance() {
+        return mInstance;
+    }
+
     private HttpProxyCacheServer newProxy() {
         return new HttpProxyCacheServer(this);
     }
@@ -43,9 +47,5 @@ public class MyApplication extends Application {
         mInstance = this;
 
         applicationHandler = new Handler(getInstance().getMainLooper());
-    }
-
-    public static synchronized MyApplication getInstance() {
-        return mInstance;
     }
 }

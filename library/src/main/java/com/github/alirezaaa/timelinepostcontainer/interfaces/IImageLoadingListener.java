@@ -24,11 +24,11 @@ public interface IImageLoadingListener {
     /**
      * Is called when image loading progress changed.
      *
-     * @param imageUri Image URI
+     * @param imageUri     Image URI
      * @param progressView Progress view
-     * @param view     View for image. Can be <b>null</b>.
-     * @param current  Downloaded size in bytes
-     * @param total    Total size in bytes
+     * @param view         View for image. Can be <b>null</b>.
+     * @param current      Downloaded size in bytes
+     * @param total        Total size in bytes
      */
     void onProgressUpdate(String imageUri, ProgressWheel progressView, View view, int current, int total);
 }
