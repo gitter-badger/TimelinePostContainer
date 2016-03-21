@@ -32,7 +32,7 @@ public class SampleOneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sample_one);
+        setContentView(R.layout.item);
         ButterKnife.bind(this);
 
         timelinePostContainer.setImagePath("http://collectup.blob.core.windows.net/images/420e969d-3fef-48cf-a968-f79945a5ed85.jpg");
