@@ -22,7 +22,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.IdRes;
@@ -50,7 +49,7 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     private static VideoView mPreviousVideoView;
     private static VideoView mCurrentVideoView;
     private GestureDetector mGestureDetector;
-    private Options mOptions = new Options(getContext());
+    private Options mOptions = new Options(getContext(), this);
     private int lastPlaybackPosition;
     private String mImagePath;
     private String mVideoPath;
@@ -95,30 +94,20 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     }
 
     private void initProperties() {
-        mOptions.imageLoader = InitClass.imageLoader(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
     }
 
     private void initAttrs(AttributeSet attrs) {
         TypedArray customTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TimelinePostContainer);
 
-        mOptions.playDrawable = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_playDrawable);
-        if (mOptions.playDrawable == null) {
-            mOptions.playDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp);
-        }
-
-        mOptions.pauseDrawable = customTypedArray.getDrawable(R.styleable.TimelinePostContainer_tpc_pauseDrawable);
-        if (mOptions.pauseDrawable == null) {
-            mOptions.pauseDrawable = AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp);
-        }
-
         mOptions.drawablesAnimation = AnimationUtils.loadAnimation(getContext(), customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_drawablesAnim, R.anim.foreground));
-
         mOptions.looping = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_looping, true);
         mOptions.keepScreenOnWhilePlaying = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_keepOnScreen, true);
         mOptions.debug = customTypedArray.getBoolean(R.styleable.TimelinePostContainer_tpc_debug, false);
-        mOptions.setVideoLoadingView(this, customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
-        mOptions.setImageLoadingView(this, customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
+        mOptions.setPlayDrawable(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_playDrawable, R.drawable.ic_play_circle_filled_black_24dp));
+        mOptions.setPauseDrawable(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_pauseDrawable, R.drawable.ic_pause_circle_filled_black_24dp));
+        mOptions.setVideoLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_videoLoading, R.layout.video_loading));
+        mOptions.setImageLoadingView(customTypedArray.getResourceId(R.styleable.TimelinePostContainer_tpc_imageLoading, R.layout.image_loading));
 
         customTypedArray.recycle();
     }
@@ -270,11 +259,11 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view == null) {
             view = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.foreground, this, false);
-            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp));
+            view.setImageDrawable(mOptions.playDrawable);
             addView(view);
         } else {
-            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_play_circle_filled_black_24dp));
-            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.foreground));
+            view.setImageDrawable(mOptions.playDrawable);
+            view.startAnimation(mOptions.drawablesAnimation);
         }
     }
 
@@ -291,14 +280,9 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     private void showPauseDrawable() {
         ImageView view = (ImageView) findViewById(R.id.foreground);
         if (view != null) {
-            view.setImageDrawable(AndroidUtils.getDrawable(getResources(), R.drawable.ic_pause_circle_filled_black_24dp));
-            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.foreground));
+            view.setImageDrawable(mOptions.pauseDrawable);
+            view.startAnimation(mOptions.drawablesAnimation);
         }
-    }
-
-    @Override
-    public void setForeground(Drawable foreground) {
-        super.setForeground(foreground);
     }
 
     @Override
