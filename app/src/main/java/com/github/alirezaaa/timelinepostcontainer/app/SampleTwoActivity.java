@@ -56,8 +56,9 @@ public class SampleTwoActivity extends AppCompatActivity {
 
         FastItemAdapter<SampleItem> adapter = new FastItemAdapter<>();
 
+        SampleItem item = new SampleItem();
         for (String mLink : mLinks) {
-            adapter.add(new SampleItem(this).setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLink));
+            adapter.add(item.setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLink));
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
