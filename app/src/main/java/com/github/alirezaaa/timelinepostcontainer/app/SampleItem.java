@@ -16,7 +16,6 @@
 
 package com.github.alirezaaa.timelinepostcontainer.app;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -30,11 +29,6 @@ import butterknife.ButterKnife;
 public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> {
     public String thumbnail;
     public String videoPath;
-    public Context mContext;
-
-    public SampleItem(Context context) {
-        mContext = context;
-    }
 
     public SampleItem setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
@@ -55,7 +49,7 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
 
     @Override
     public int getLayoutRes() {
-        return R.layout.sample_one;
+        return R.layout.item;
     }
 
     @Override
