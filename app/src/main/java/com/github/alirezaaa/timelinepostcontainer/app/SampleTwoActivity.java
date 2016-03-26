@@ -29,22 +29,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SampleTwoActivity extends AppCompatActivity {
-    private final String[] mLinks = {
-            "http://collectup.blob.core.windows.net/videos/ce39daa3-cada-4e21-9342-1aa062d39324.mp4",
-            "http://collectup.blob.core.windows.net/videos/fc16f22a-e458-4056-8218-1d17ddbadb37.mp4",
-            "http://collectup.blob.core.windows.net/videos/1ac93067-d67c-47ed-aa39-cce4491b4bf9.mp4",
-            "http://collectup.blob.core.windows.net/videos/eac3e2e3-5eea-407b-9179-e1d73db5d4c3.mp4",
-            "http://collectup.blob.core.windows.net/videos/4c72fc6e-bd9e-4484-b05b-4f8935cd71dc.mp4",
-            "http://collectup.blob.core.windows.net/videos/82b93c7d-f9e7-4e3b-b091-ccc79a277e5c.mp4",
-            "http://collectup.blob.core.windows.net/videos/ac532f3e-2939-4038-a5e8-56def4fc675b.mp4",
-            "http://collectup.blob.core.windows.net/videos/eae78c1a-d5b5-4163-b5b5-14563f816752.mp4",
-            "http://collectup.blob.core.windows.net/videos/d67102c7-0091-4630-87e1-63e1f4be8f1b.mp4",
-            "http://collectup.blob.core.windows.net/videos/ef389d3e-bda5-4ad9-b454-012f5ab7bde6.mp4",
-            "http://collectup.blob.core.windows.net/videos/e55d634d-72ba-45f9-ac19-c00005baf094.mp4",
-            "http://collectup.blob.core.windows.net/videos/46b9b717-6d9b-4940-8831-51bab4f9be6a.mp4",
-            "http://collectup.blob.core.windows.net/videos/088c1fda-e64e-48eb-92e6-32c9c73bf331.mp4",
-            "http://collectup.blob.core.windows.net/videos/49689fa9-6010-4d49-aa8f-751313228868.mp4"
-    };
     @Bind(R.id.recyclerView)
     public RecyclerView recyclerView;
 
@@ -57,8 +41,8 @@ public class SampleTwoActivity extends AppCompatActivity {
         FastItemAdapter<SampleItem> adapter = new FastItemAdapter<>();
 
         SampleItem item = new SampleItem();
-        for (String mLink : mLinks) {
-            adapter.add(item.setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath(mLink));
+        for (int i = 0; i < 10; i++) {
+            adapter.add(item.setThumbnail("https://i.imgur.com/7OGKVPn.jpg").setVideoPath("http://collectup.blob.core.windows.net/videos/ce39daa3-cada-4e21-9342-1aa062d39324.mp4"));
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
