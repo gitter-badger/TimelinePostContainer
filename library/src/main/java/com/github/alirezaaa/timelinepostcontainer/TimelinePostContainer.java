@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.IdRes;
@@ -48,6 +49,7 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     // previous and current video view fields must be static
     private static VideoView mPreviousVideoView;
     private static VideoView mCurrentVideoView;
+    private final AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
     private GestureDetector mGestureDetector;
     private Options mOptions = new Options(getContext(), this);
     private int lastPlaybackPosition;
@@ -58,6 +60,11 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     private Type mType;
     @IdRes
     private int mImageId;
+    private MediaPlayer mCurrentVideoViewMediaPlayer;
+
+    //TODO agar pausePreviousVideo ro to halate instagram bardaram onvaght momkene do video play beshan!
+    //TODO audioBadge auto hide beshe
+    //animation baraye namayeshe badge bezar va option ham bezar vasash
 
     public TimelinePostContainer(Context context) {
         super(context);
@@ -88,13 +95,12 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
         return this;
     }
 
-    public TimelinePostContainer setOptions(Options options) {
-        mOptions = options;
-        return this;
-    }
-
     private void initProperties() {
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
+
+        if ((mOptions.playStyle == PlayStyle.INSTAGRAM) && mOptions.muted && !AndroidUtils.isMuted(mAudioManager)) {
+            AndroidUtils.mute(mAudioManager);
+        }
     }
 
     private void initAttrs(AttributeSet attrs) {
@@ -392,12 +398,23 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
         return (mType == Type.IMAGE) && mGestureDetector.onTouchEvent(event);
     }
 
+    public Options getOptions() {
+        return mOptions;
+    }
+
+    public TimelinePostContainer setOptions(Options options) {
+        mOptions = options;
+        return this;
+    }
+
     @Override
     public void prepareVideo(View v) {
         // prevents from preparing the video multiple times by multiple clicking on the image.
         v.setOnClickListener(null);
 
-        showPlayDrawable();
+        if (mOptions.playStyle != PlayStyle.INSTAGRAM) {
+            showPlayDrawable();
+        }
         showVideoLoading();
 
         final VideoView videoView = (VideoView) LayoutInflater.from(getContext()).inflate(R.layout.video_view, this, false);
@@ -431,10 +448,11 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
             public void onPrepared(MediaPlayer mp) {
                 mp.setOnBufferingUpdateListener(TimelinePostContainer.this);
                 mp.setOnCompletionListener(TimelinePostContainer.this);
-                mp.setLooping(mOptions.looping);
+                mp.setLooping((mOptions.playStyle == PlayStyle.INSTAGRAM) || mOptions.looping);
 
                 mPreviousVideoView = mCurrentVideoView;
                 mCurrentVideoView = videoView;
+                mCurrentVideoViewMediaPlayer = mp;
 
                 stopPreviousVideo();
 
@@ -451,17 +469,48 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
 
     @Override
     public void onVideoTouch(View v, MotionEvent event) {
-        if (((MediaController.MediaPlayerControl) v).isPlaying()) {
-            ((MediaController.MediaPlayerControl) v).pause();
-            removeImageLoadingView();
-            showPauseDrawable();
-        } else {
-            mPreviousVideoView = mCurrentVideoView;
-            mCurrentVideoView = ((VideoView) v);
-            stopPreviousVideo();
+        if (mOptions.playStyle == PlayStyle.WITH_DRAWABLES) {
+            if (((MediaController.MediaPlayerControl) v).isPlaying()) {
+                ((MediaController.MediaPlayerControl) v).pause();
+                removeImageLoadingView();
+                showPauseDrawable();
+            } else {
+                mPreviousVideoView = mCurrentVideoView;
+                mCurrentVideoView = ((VideoView) v);
+                stopPreviousVideo();
 
-            showPlayDrawable();
-            mCurrentVideoView.start();
+                showPlayDrawable();
+                mCurrentVideoView.start();
+            }
+        } else if (mOptions.playStyle == PlayStyle.INSTAGRAM) {
+            if (AndroidUtils.videoHasSound(mCurrentVideoViewMediaPlayer)) {
+                if (AndroidUtils.isMuted(mAudioManager)) {
+                    AndroidUtils.unmute(mAudioManager);
+                    mOptions.audioBadgeView.setMute(false, true);
+                } else {
+                    AndroidUtils.mute(mAudioManager);
+                    mOptions.audioBadgeView.setMute(true, true);
+
+                    if (mListeners.listener != null) {
+                        mListeners.listener.onSoundMuted((VideoView) v);
+                    }
+                }
+                showAudioBadge();
+            } else {
+                mOptions.audioBadgeView.setMute(true, false);
+                showAudioBadge();
+
+                if (mListeners.listener != null) {
+                    mListeners.listener.onSoundMuted((VideoView) v);
+                }
+            }
+        }
+    }
+
+    private void showAudioBadge() {
+        View view = findViewById(R.id.audioBadge);
+        if (view == null) {
+            addView(mOptions.audioBadgeView);
         }
     }
 
@@ -480,8 +529,12 @@ public class TimelinePostContainer extends FrameLayout implements IListener, Vie
     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
         if (mType == Type.VIDEO) {
             mImageView.setOnClickListener(this);
-
-            showPlayDrawable();
+            if (mOptions.playStyle == PlayStyle.INSTAGRAM) {
+                //FIXME auto-play it should not be called here for better performance
+                mImageView.callOnClick();
+            } else {
+                showPlayDrawable();
+            }
         } else {
             mImageView.setOnClickListener(this);
             mImageView.setOnTouchListener(this);
