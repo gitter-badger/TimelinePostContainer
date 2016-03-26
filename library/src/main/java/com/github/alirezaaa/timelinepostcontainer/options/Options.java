@@ -30,7 +30,9 @@ import android.view.animation.AnimationUtils;
 
 import com.github.alirezaaa.timelinepostcontainer.AndroidUtils;
 import com.github.alirezaaa.timelinepostcontainer.InitClass;
+import com.github.alirezaaa.timelinepostcontainer.PlayStyle;
 import com.github.alirezaaa.timelinepostcontainer.R;
+import com.github.alirezaaa.timelinepostcontainer.views.AudioBadgeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -47,6 +49,9 @@ public class Options {
     public AVLoadingIndicatorView videoLoadingView;
     public ImageLoader imageLoader;
     public ProgressWheel imageLoadingView;
+    public boolean muted;
+    public PlayStyle playStyle;
+    public AudioBadgeView audioBadgeView;
 
     public Options(Context context, ViewGroup viewGroup) {
         mContext = context;
@@ -56,17 +61,20 @@ public class Options {
         looping = true;
         keepScreenOnWhilePlaying = true;
         imageLoader = InitClass.imageLoader(context);
+        playStyle = PlayStyle.INSTAGRAM;
         setPlayDrawable(R.drawable.ic_play_circle_filled_black_24dp);
         setPauseDrawable(R.drawable.ic_pause_circle_filled_black_24dp);
         setDrawablesAnimation(R.anim.foreground);
         setVideoLoadingView(R.layout.video_loading);
         setImageLoadingView(R.layout.image_loading);
+        setAudioBadgeView(R.layout.audio_badge_view);
     }
 
     public final Options setVideoLoadingView(@LayoutRes int videoLoadingLayout) {
         View view = LayoutInflater.from(mContext).inflate(videoLoadingLayout, mViewGroup, false);
         if (AndroidUtils.isInstanceOf(view, AVLoadingIndicatorView.class, mContext.getResources())) {
             videoLoadingView = (AVLoadingIndicatorView) view;
+            videoLoadingView.setId(R.id.videoLoading);
         }
         return this;
     }
@@ -90,6 +98,17 @@ public class Options {
         View view = LayoutInflater.from(mContext).inflate(layout, mViewGroup, false);
         if (AndroidUtils.isInstanceOf(view, ProgressWheel.class, mContext.getResources())) {
             imageLoadingView = (ProgressWheel) view;
+            imageLoadingView.setId(R.id.imageLoading);
+        }
+
+        return this;
+    }
+
+    public final Options setAudioBadgeView(@LayoutRes int layout) {
+        View view = LayoutInflater.from(mContext).inflate(layout, mViewGroup, false);
+        if (AndroidUtils.isInstanceOf(view, AudioBadgeView.class, mContext.getResources())) {
+            audioBadgeView = (AudioBadgeView) view;
+            audioBadgeView.setId(R.id.audioBadge);
         }
 
         return this;
