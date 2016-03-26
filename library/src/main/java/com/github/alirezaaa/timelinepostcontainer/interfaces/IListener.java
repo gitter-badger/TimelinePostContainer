@@ -26,4 +26,10 @@ public interface IListener {
     void onImageCreate(ImageView view);
 
     void onVideoCreate(VideoView view);
+
+    /**
+     * Works with {@link com.github.alirezaaa.timelinepostcontainer.PlayStyle#INSTAGRAM}
+     * @param view
+     */
+    void onSoundMuted(VideoView view);
 }
