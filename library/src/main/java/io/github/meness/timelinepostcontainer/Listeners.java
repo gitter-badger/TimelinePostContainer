@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.meness.timelinepostcontainer.options;
+package io.github.meness.timelinepostcontainer;
 
 import io.github.meness.timelinepostcontainer.interfaces.IImageClickListener;
 import io.github.meness.timelinepostcontainer.interfaces.IImageLoadingListener;

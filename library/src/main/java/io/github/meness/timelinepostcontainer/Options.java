@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.meness.timelinepostcontainer.options;
+package io.github.meness.timelinepostcontainer;
 
 
 import android.content.Context;
@@ -28,13 +28,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.github.alirezaaa.timelinepostcontainer.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import io.github.meness.timelinepostcontainer.AndroidUtils;
-import io.github.meness.timelinepostcontainer.InitClass;
 
 public class Options {
     private final Context mContext;
@@ -78,12 +74,12 @@ public class Options {
     }
 
     public final Options setPauseDrawable(@DrawableRes int res) {
-        pauseDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
+        pauseDrawable = AndroidUtils.getDrawable(mContext, res);
         return this;
     }
 
     public final Options setPlayDrawable(@DrawableRes int res) {
-        playDrawable = AndroidUtils.getDrawable(mContext.getResources(), res);
+        playDrawable = AndroidUtils.getDrawable(mContext, res);
         return this;
     }
 

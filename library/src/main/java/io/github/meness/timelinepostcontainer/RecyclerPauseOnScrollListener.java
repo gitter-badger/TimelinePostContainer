@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.meness.timelinepostcontainer.utils;
+package io.github.meness.timelinepostcontainer;
 
 import android.support.v7.widget.RecyclerView;
 
