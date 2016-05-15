@@ -41,7 +41,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
-    compile 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.github.alirezaaa:ProgressWheel:1.2'
     compile 'com.wang.avi:library:1.0.5'
     //compile 'com.danikula:videocache:2.3.4'

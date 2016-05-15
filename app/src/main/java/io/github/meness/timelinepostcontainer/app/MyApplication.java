@@ -16,10 +16,10 @@
 
 package io.github.meness.timelinepostcontainer.app;
 
-import android.app.Application;
 import android.os.Handler;
+import android.support.multidex.MultiDexApplication;
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     public static volatile Handler applicationHandler;
     private static MyApplication mInstance;
