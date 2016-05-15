@@ -21,11 +21,11 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.alirezaaa.timelinepostcontainer.R;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -51,11 +51,14 @@ public final class AndroidUtils {
         return true;
     }
 
-    public static Drawable getDrawable(Resources resources, @DrawableRes int res) {
+    /**
+     * Equivalent {@link Context#getResources()#getDrawable(Context, int)}
+     */
+    public static Drawable getDrawable(Context context, @DrawableRes int res) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return resources.getDrawable(res, null);
+            return context.getResources().getDrawable(res, null);
         }
-        return resources.getDrawable(res);
+        return ContextCompat.getDrawable(context, res);
     }
 
     /**

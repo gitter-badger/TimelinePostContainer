@@ -18,7 +18,6 @@ package io.github.meness.timelinepostcontainer;
 
 import android.content.Context;
 
-import com.github.alirezaaa.timelinepostcontainer.BuildConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
