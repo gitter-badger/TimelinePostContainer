@@ -26,7 +26,7 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.meness.timelinepostcontainer.InitClass;
-import io.github.meness.timelinepostcontainer.utils.RecyclerPauseOnScrollListener;
+import io.github.meness.timelinepostcontainer.RecyclerPauseOnScrollListener;
 
 public class SampleTwoActivity extends AppCompatActivity {
     private final String[] mLinks = {

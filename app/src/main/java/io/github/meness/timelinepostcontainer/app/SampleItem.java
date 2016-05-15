@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import io.github.meness.timelinepostcontainer.TimelinePostContainer;
 import io.github.meness.timelinepostcontainer.Type;
 
-public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> {
+public class SampleItem extends AbstractItem<SampleItem, SampleItem.SampleViewHolder> {
     public String thumbnail;
     public String videoPath;
 
@@ -44,7 +44,7 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
 
     @Override
     public int getType() {
-        return 0;
+        return R.id.timelinePostContainer;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
     }
 
     @Override
-    public void bindView(ViewHolder holder) {
+    public void bindView(SampleItem.SampleViewHolder holder) {
         super.bindView(holder);
 
         holder.timelinePostContainer.setImagePath(thumbnail);
@@ -61,11 +61,11 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
         holder.timelinePostContainer.build(Type.VIDEO);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class SampleViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.timelinePostContainer)
         public TimelinePostContainer timelinePostContainer;
 
-        public ViewHolder(View itemView) {
+        public SampleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

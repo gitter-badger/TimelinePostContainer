@@ -39,11 +39,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.github.alirezaaa.timelinepostcontainer.R;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-
-import io.github.meness.timelinepostcontainer.options.Listeners;
-import io.github.meness.timelinepostcontainer.options.Options;
 
 public class TimelinePostContainer extends FrameLayout implements IListener, View.OnClickListener, View.OnTouchListener {
 
