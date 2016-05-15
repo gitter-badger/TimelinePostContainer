@@ -30,17 +30,7 @@ dependencies {
 	compile 'io.github.meness:timelinepostcontainer:x.y.z'
 }
 ```
-### Provide the Maven Dependency
-Add the dependency:
-```xml
-<dependency>
-  <groupId>io.github.meness</groupId>
-  <artifactId>timelinepostcontainer</artifactId>
-  <version>x.y.z</version>
-  <type>pom</type>
-</dependency>
-```
-**Note:** Replace `x.y.z` with the latest version which can be found at [releases section](../../releases).
+**Note:** Replace `x.y.z` with the latest version which can be found at [releases page](https://github.com/meNESS/TimelinePostContainer/releases).
 ### Clone or Download `.zip` file
 Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
@@ -48,7 +38,7 @@ Clone this repository or download the compressed file, then extract to your comp
 You only need to provide your desired image and/or video paths as I did below or simply compile and try the sample `app` provided:
 ```java
 public class SampleActivity extends AppCompatActivity {
-    @Bind(R.id.timelinePostContainer)
+    @BindView(R.id.timelinePostContainer)
     TimelinePostContainer timelinePostContainer;
 
     @Override
@@ -85,7 +75,7 @@ Check out [listeners package](https://github.com/alirezaaa/TimelinePostContainer
 
 ```java
 public class SampleActivity extends AppCompatActivity {
-    @Bind(R.id.timelinePostContainer)
+    @BindView(R.id.timelinePostContainer)
     public TimelinePostContainer timelinePostContainer;
 
     @Override
@@ -124,9 +114,9 @@ Check out [attrs.xml](https://github.com/alirezaaa/TimelinePostContainer/blob/ma
 *feel free to send me new projects.*
 - [Collect-Up](http://collect-up.com)
 
-## Contributors
-- [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (developer)
-- Farzad Nadiri (thanks to)
+## Developed By
+- Alireza Eskandarpour Shoferi
+    - [Twitter](https://twitter.com/enormoustheory) - [aesshoferi@gmail.com](mailto:aesshoferi@gmail.com)
 
 ## License
     Copyright 2016 Alireza Eskandarpour Shoferi
