@@ -15,16 +15,17 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.github.alirezaaa.timelinepostcontainer.app"
+        applicationId "io.github.meness.timelinepostcontainer.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName '2.2.1.2'
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
     buildTypes {
         release {
@@ -41,9 +42,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
-    compile 'com.github.mikepenz.FastAdapter:library:v1.2.4'
-    compile 'com.danikula:videocache:2.3.4'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
+    compile('com.mikepenz:fastadapter:1.5.0@aar') {
+        transitive = true
+    }
+    compile 'com.jakewharton:butterknife:8.0.1'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile project(':library')
+    //compile 'com.danikula:videocache:2.3.4'
 }
