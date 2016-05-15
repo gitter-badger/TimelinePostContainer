@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer;
+package io.github.meness.timelinepostcontainer;
 
 public enum Type {
     IMAGE, VIDEO

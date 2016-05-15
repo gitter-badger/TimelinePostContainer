@@ -19,11 +19,11 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer
+    <io.github.meness.timelinepostcontainer.TimelinePostContainer
         android:id="@+id/timelinePostContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer>
+    </io.github.meness.timelinepostcontainer.TimelinePostContainer>
 
 </LinearLayout>

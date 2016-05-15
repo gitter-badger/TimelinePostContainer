@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.app;
+package io.github.meness.timelinepostcontainer.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.github.alirezaaa.timelinepostcontainer.InitClass;
-import com.github.alirezaaa.timelinepostcontainer.utils.RecyclerPauseOnScrollListener;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.meness.timelinepostcontainer.InitClass;
+import io.github.meness.timelinepostcontainer.utils.RecyclerPauseOnScrollListener;
 
 public class SampleTwoActivity extends AppCompatActivity {
     private final String[] mLinks = {
@@ -45,7 +45,7 @@ public class SampleTwoActivity extends AppCompatActivity {
             "http://collectup.blob.core.windows.net/videos/088c1fda-e64e-48eb-92e6-32c9c73bf331.mp4",
             "http://collectup.blob.core.windows.net/videos/49689fa9-6010-4d49-aa8f-751313228868.mp4"
     };
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     public RecyclerView recyclerView;
 
     @Override

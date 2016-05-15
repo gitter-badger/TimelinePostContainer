@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.interfaces;
+package io.github.meness.timelinepostcontainer.interfaces;
 
 import android.view.View;
 

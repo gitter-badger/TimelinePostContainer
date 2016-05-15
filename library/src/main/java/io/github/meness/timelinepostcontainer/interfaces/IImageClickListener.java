@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.options;
+package io.github.meness.timelinepostcontainer.interfaces;
 
-import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageClickListener;
-import com.github.alirezaaa.timelinepostcontainer.interfaces.IImageLoadingListener;
-import com.github.alirezaaa.timelinepostcontainer.interfaces.IListener;
-import com.github.alirezaaa.timelinepostcontainer.interfaces.ITapListener;
+import android.view.View;
 
-public class Listeners {
-    public IImageClickListener imageClick;
-    public ITapListener tap;
-    public IListener listener;
-    public IImageLoadingListener imageLoading;
+import io.github.meness.timelinepostcontainer.Type;
+
+public interface IImageClickListener {
+    void onImageClick(View view, Type type);
 }

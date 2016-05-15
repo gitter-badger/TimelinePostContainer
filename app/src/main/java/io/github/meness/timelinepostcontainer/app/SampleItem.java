@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.app;
+package io.github.meness.timelinepostcontainer.app;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.github.alirezaaa.timelinepostcontainer.TimelinePostContainer;
-import com.github.alirezaaa.timelinepostcontainer.Type;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.meness.timelinepostcontainer.TimelinePostContainer;
+import io.github.meness.timelinepostcontainer.Type;
 
 public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> {
     public String thumbnail;
@@ -62,7 +62,7 @@ public class SampleItem extends AbstractItem<SampleItem, SampleItem.ViewHolder> 
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.timelinePostContainer)
+        @BindView(R.id.timelinePostContainer)
         public TimelinePostContainer timelinePostContainer;
 
         public ViewHolder(View itemView) {

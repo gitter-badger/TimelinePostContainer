@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer;
+package io.github.meness.timelinepostcontainer;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.alirezaaa.timelinepostcontainer.R;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
 

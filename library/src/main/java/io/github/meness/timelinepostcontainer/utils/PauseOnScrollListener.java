@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.utils;
+package io.github.meness.timelinepostcontainer.utils;
 
 
 import android.widget.AbsListView;

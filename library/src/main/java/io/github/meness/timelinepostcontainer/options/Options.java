@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.options;
+package io.github.meness.timelinepostcontainer.options;
 
 
 import android.content.Context;
@@ -28,12 +28,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.github.alirezaaa.timelinepostcontainer.AndroidUtils;
-import com.github.alirezaaa.timelinepostcontainer.InitClass;
 import com.github.alirezaaa.timelinepostcontainer.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import io.github.meness.timelinepostcontainer.AndroidUtils;
+import io.github.meness.timelinepostcontainer.InitClass;
 
 public class Options {
     private final Context mContext;

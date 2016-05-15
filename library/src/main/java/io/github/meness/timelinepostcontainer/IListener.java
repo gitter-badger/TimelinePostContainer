@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer;
+package io.github.meness.timelinepostcontainer;
 
 import android.media.MediaPlayer;
 import android.view.MotionEvent;

@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.alirezaaa.timelinepostcontainer.interfaces;
+package io.github.meness.timelinepostcontainer.options;
 
-import android.view.MotionEvent;
+import io.github.meness.timelinepostcontainer.interfaces.IImageClickListener;
+import io.github.meness.timelinepostcontainer.interfaces.IImageLoadingListener;
+import io.github.meness.timelinepostcontainer.interfaces.IListener;
+import io.github.meness.timelinepostcontainer.interfaces.ITapListener;
 
-import com.github.alirezaaa.timelinepostcontainer.Type;
-
-public interface ITapListener {
-    void onDoubleTap(MotionEvent e, Type type);
-
-    void onSingleTap(MotionEvent e, Type type);
+public class Listeners {
+    public IImageClickListener imageClick;
+    public ITapListener tap;
+    public IListener listener;
+    public IImageLoadingListener imageLoading;
 }
