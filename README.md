@@ -1,5 +1,7 @@
 # TimelinePostContainer
 
+[![Join the chat at https://gitter.im/meNESS/TimelinePostContainer](https://badges.gitter.im/meNESS/TimelinePostContainer.svg)](https://gitter.im/meNESS/TimelinePostContainer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](http://developer.android.com/index.html)
 [![Compatibility](https://img.shields.io/badge/compatibility-API%2016%2B-green.svg)](https://android-arsenal.com/api?level=16)
 [![Release](https://jitpack.io/v/alirezaaa/TimelinePostContainer.svg)](https://jitpack.io/#alirezaaa/TimelinePostContainer)
